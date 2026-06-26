@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fire to Flavor — Command Center</title>
+  <link rel="stylesheet" href="src/style.css" />
+</head>
+<body>
+
+  <!-- ═══════════════════════════════════════════════
+       HERO — Full-screen video with parallax layers
+  ════════════════════════════════════════════════ -->
+  <section id="hero">
+    <div class="video-container" id="videoContainer">
+      <video id="heroVideo" autoplay muted loop playsinline>
+        <source src="videos/fire-to-flavor-1.mp4" type="video/mp4" />
+      </video>
+      <div class="video-overlay"></div>
+
+      <!-- Parallax floating particles -->
+      <canvas id="particleCanvas"></canvas>
+
+      <!-- Hero content -->
+      <div class="hero-content" id="heroContent">
+        <div class="hero-badge">COMMAND CENTER ACTIVE</div>
+        <h1 class="hero-title" id="heroTitle">
+          <span class="line-1">FIRE TO</span>
+          <span class="line-2">FLAVOR</span>
+        </h1>
+        <p class="hero-sub" id="heroSub">An intelligent agency powered by AI agents</p>
+        <div class="hero-actions">
+          <button class="btn-primary" onclick="openChat()">OPEN COMMAND CENTER</button>
+          <button class="btn-ghost" onclick="scrollToSection('command-room')">ENTER</button>
+        </div>
+      </div>
+
+      <!-- Scroll indicator -->
+      <div class="scroll-indicator">
+        <div class="scroll-dot"></div>
+        <span>SCROLL</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       COMMAND ROOM — Three.js 3D agent scene
+  ════════════════════════════════════════════════ -->
+  <section id="command-room">
+    <div class="section-header">
+      <span class="section-tag">LIVE OPERATIONS</span>
+      <h2>Command Room</h2>
+      <p>Your agents await orders. Use the Command Center chat to deploy them.</p>
+    </div>
+
+    <div class="command-room-layout">
+      <!-- 3D Canvas -->
+      <div class="three-viewport" id="threeViewport">
+        <canvas id="agentCanvas"></canvas>
+        <div class="viewport-hud">
+          <span class="hud-label">COMMAND CENTER · LIVE</span>
+          <span class="hud-dot"></span>
+        </div>
+        <!-- Agent status badges that appear dynamically -->
+        <div id="agentBadges" class="agent-badges"></div>
+      </div>
+
+      <!-- Agent roster panel -->
+      <div class="agent-roster">
+        <div class="roster-header">AGENT ROSTER</div>
+        <div id="agentList" class="agent-list">
+          <!-- Populated by JS -->
+        </div>
+        <div class="roster-hint">
+          <span>💬</span>
+          <span>Type a command in the chat to summon agents</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       SECTIONS — Content controlled by chat commands
+  ════════════════════════════════════════════════ -->
+  <section id="section-design" class="content-section locked">
+    <div class="section-lock-overlay">
+      <div class="lock-icon">🔒</div>
+      <p>Unlock with: <em>"activate design section"</em></p>
+    </div>
+    <div class="section-inner">
+      <span class="section-tag">DESIGN DIVISION</span>
+      <h2>Creative Intelligence</h2>
+      <div class="cards-grid">
+        <div class="card">
+          <div class="card-icon">✦</div>
+          <h3>Brand Identity</h3>
+          <p>Crafting visual systems that command attention and build lasting recognition.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">◈</div>
+          <h3>UI/UX Systems</h3>
+          <p>Designing interfaces that convert visitors into loyal customers.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">❋</div>
+          <h3>Motion Design</h3>
+          <p>Animations and micro-interactions that breathe life into every pixel.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="section-dev" class="content-section locked">
+    <div class="section-lock-overlay">
+      <div class="lock-icon">🔒</div>
+      <p>Unlock with: <em>"activate development section"</em></p>
+    </div>
+    <div class="section-inner">
+      <span class="section-tag">DEVELOPMENT DIVISION</span>
+      <h2>Engineering Excellence</h2>
+      <div class="cards-grid">
+        <div class="card">
+          <div class="card-icon">⬡</div>
+          <h3>Full-Stack Systems</h3>
+          <p>Scalable, secure applications built on modern architecture.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">⬢</div>
+          <h3>AI Integration</h3>
+          <p>Embedding intelligence into every product layer.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">⬟</div>
+          <h3>Infrastructure</h3>
+          <p>Cloud-native systems built to handle any scale.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="section-marketing" class="content-section locked">
+    <div class="section-lock-overlay">
+      <div class="lock-icon">🔒</div>
+      <p>Unlock with: <em>"activate marketing section"</em></p>
+    </div>
+    <div class="section-inner">
+      <span class="section-tag">MARKETING DIVISION</span>
+      <h2>Growth Engines</h2>
+      <div class="cards-grid">
+        <div class="card">
+          <div class="card-icon">▲</div>
+          <h3>Performance Marketing</h3>
+          <p>Data-driven campaigns that maximize every dollar spent.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">△</div>
+          <h3>Content Strategy</h3>
+          <p>Narratives that resonate, convert, and compound over time.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">▴</div>
+          <h3>SEO & Authority</h3>
+          <p>Organic growth engineered for long-term dominance.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CEO Office Section -->
+  <section id="section-ceo" class="content-section ceo-section locked">
+    <div class="section-lock-overlay">
+      <div class="lock-icon">🔒</div>
+      <p>Unlock with: <em>"open CEO office"</em></p>
+    </div>
+    <div class="section-inner">
+      <span class="section-tag">EXECUTIVE FLOOR</span>
+      <h2>CEO Office</h2>
+      <div class="ceo-layout">
+        <div class="ceo-desk">
+          <div class="desk-monitor">
+            <div class="monitor-screen" id="ceoMonitorScreen">
+              <span class="monitor-text">AWAITING DIRECTIVES</span>
+            </div>
+          </div>
+          <div class="desk-label">EXECUTIVE COMMAND TERMINAL</div>
+        </div>
+        <div class="ceo-info">
+          <h3>Strategic Command</h3>
+          <p>The CEO office is the apex of the command structure. All division leaders report here. Use the Command Center to summon leaders for briefings.</p>
+          <div class="ceo-stats">
+            <div class="stat"><span class="stat-val" id="agentsDeployed">0</span><span class="stat-label">Agents Deployed</span></div>
+            <div class="stat"><span class="stat-val" id="commandsIssued">0</span><span class="stat-label">Commands Issued</span></div>
+            <div class="stat"><span class="stat-val" id="sectionsActive">0</span><span class="stat-label">Sections Active</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       CHAT SIDEBAR — Command Center
+  ════════════════════════════════════════════════ -->
+  <div id="chatSidebar" class="chat-sidebar">
+    <!-- Toggle button -->
+    <button class="chat-toggle" id="chatToggle" onclick="toggleChat()">
+      <span class="toggle-icon">⌘</span>
+      <span class="toggle-label">COMMAND</span>
+    </button>
+
+    <!-- Sidebar panel -->
+    <div class="chat-panel" id="chatPanel">
+      <div class="chat-header">
+        <div class="chat-header-left">
+          <div class="chat-status-dot"></div>
+          <span class="chat-title">COMMAND CENTER</span>
+        </div>
+        <div class="chat-header-right">
+          <button class="btn-icon" onclick="clearChat()" title="Clear">✕</button>
+        </div>
+      </div>
+
+      <!-- Agent status bar -->
+      <div class="agent-status-bar" id="agentStatusBar">
+        <div class="status-item active" id="statusCEO">
+          <span class="status-dot"></span><span>CEO</span>
+        </div>
+        <div class="status-item" id="statusDesign">
+          <span class="status-dot"></span><span>Design</span>
+        </div>
+        <div class="status-item" id="statusDev">
+          <span class="status-dot"></span><span>Dev</span>
+        </div>
+        <div class="status-item" id="statusMarketing">
+          <span class="status-dot"></span><span>Mktg</span>
+        </div>
+      </div>
+
+      <!-- Messages -->
+      <div class="chat-messages" id="chatMessages">
+        <div class="message system-message">
+          <div class="message-avatar system-avatar">⌘</div>
+          <div class="message-content">
+            <div class="message-label">COMMAND CENTER</div>
+            <div class="message-text">
+              All systems online. I am your AI Command Center. Issue directives to deploy agents across your divisions.<br/><br/>
+              Try: <em>"call design leader to command center"</em>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Input area -->
+      <div class="chat-input-area">
+        <div class="input-wrapper">
+          <textarea
+            id="chatInput"
+            class="chat-input"
+            placeholder="Issue a command..."
+            rows="1"
+            onkeydown="handleInputKey(event)"
+            oninput="autoResize(this)"
+          ></textarea>
+          <button class="send-btn" id="sendBtn" onclick="sendCommand()">
+            <span>▶</span>
+          </button>
+        </div>
+        <div class="input-hints">
+          <span class="hint" onclick="fillCommand('call design leader to command center')">design leader</span>
+          <span class="hint" onclick="fillCommand('call dev leader to CEO office')">dev leader</span>
+          <span class="hint" onclick="fillCommand('activate all sections')">all sections</span>
+          <span class="hint" onclick="fillCommand('open CEO office')">CEO office</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Notification toast -->
+  <div id="toast" class="toast"></div>
+
+  <!-- Scripts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="src/agents.js"></script>
+  <script src="src/commands.js"></script>
+  <script src="src/app.js"></script>
+</body>
+</html>
