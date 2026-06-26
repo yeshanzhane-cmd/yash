@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kumpir Potato Café — Turkish Fire Poster</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Oswald:wght@400;600;700&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: #111;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 30px 20px;
+            font-family: 'Oswald', sans-serif;
+        }
+
+        .page-label {
+            color: #FF6B00;
+            font-family: 'Oswald', sans-serif;
+            font-size: 13px;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            opacity: 0.7;
+        }
+
+        /* ══════════════════════════════════════
+           POSTER WRAPPER
+           Roll-up banner: 85cm × 200cm ≈ 600px × 1412px
+        ══════════════════════════════════════ */
+        .poster {
+            width: 600px;
+            background: #1A1A1A;
+            position: relative;
+            overflow: hidden;
+            box-shadow:
+                0 0 0 2px #FF6B00,
+                0 30px 100px rgba(255,107,0,0.3),
+                0 0 200px rgba(0,0,0,0.9);
+        }
+
+        /* ══ AMBIENT SIDE GLOWS ══ */
+        .glow-left {
+            position: absolute; left: 0; top: 20%; width: 100px; height: 60%;
+            background: linear-gradient(to right, rgba(255,107,0,0.12), transparent);
+            pointer-events: none; z-index: 0;
+        }
+        .glow-right {
+            position: absolute; right: 0; top: 20%; width: 100px; height: 60%;
+            background: linear-gradient(to left, rgba(255,107,0,0.12), transparent);
+            pointer-events: none; z-index: 0;
+        }
+
+        /* ══════════════════════════════════════
+           ZONE 1 — HEADER
+        ══════════════════════════════════════ */
+        .header {
+            background: #0A0A0A;
+            padding: 16px 26px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            z-index: 10;
+            border-bottom: 2px solid #FF6B00;
+        }
+
+        .logo-wrap {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon-box {
+            width: 52px; height: 52px;
+            background: linear-gradient(135deg, #FF6B00, #FF3D00);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            box-shadow: 0 4px 16px rgba(255,107,0,0.5);
+            position: relative;
+        }
+
+        .logo-icon-box::after {
+            content: '+';
+            position: absolute;
+            top: -6px; right: -6px;
+            background: white;
+            color: #FF6B00;
+            width: 16px; height: 16px;
+            border-radius: 50%;
+            font-size: 14px;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1;
+        }
+
+        .logo-text-block .brand {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 26px;
+            color: #FF6B00;
+            letter-spacing: 3px;
+            line-height: 1;
+        }
+        .logo-text-block .sub-brand {
+            font-family: 'Oswald', sans-serif;
+            font-size: 11px;
+            color: #aaa;
+            letter-spacing: 4px;
+            font-weight: 400;
+        }
+
+        .social-block { text-align: right; }
+
+        .follow-label {
+            font-size: 9px;
+            color: #666;
+            letter-spacing: 3px;
+            margin-bottom: 7px;
+            text-transform: uppercase;
+        }
+
+        .social-row { display: flex; gap: 7px; justify-content: flex-end; }
+
+        .s-icon {
+            width: 30px; height: 30px;
+            background: #FF6B00;
+            border-radius: 7px;
+            display: flex; align-items: center; justify-content: center;
+            color: white; font-size: 13px; font-weight: 800;
+            font-family: Arial, sans-serif;
+            cursor: pointer;
+        }
+
+        /* ══════════════════════════════════════
+           DIAGONAL SLASH — TOP
+        ══════════════════════════════════════ */
+        .slash-top {
+            width: 100%; height: 36px;
+            background: #FF6B00;
+            clip-path: polygon(0 0, 100% 0, 100% 55%, 0 100%);
+            position: relative; z-index: 5;
+        }
+
+        /* ══════════════════════════════════════
+           ZONE 2 — HEADLINE BLOCK
+        ══════════════════════════════════════ */
+        .headline-zone {
+            background: #1A1A1A;
+            padding: 22px 30px 8px;
+            position: relative;
+            z-index: 5;
+            overflow: hidden;
+        }
+
+        .headline-fire-glow {
+            position: absolute;
+            right: -20px; top: -20px;
+            width: 280px; height: 200px;
+            background: radial-gradient(ellipse, rgba(255,107,0,0.18) 0%, transparent 65%);
+            pointer-events: none;
+        }
+
+        .script-line {
+            font-family: 'Dancing Script', cursive;
+            color: #FF6B00;
+            font-size: 30px;
+            letter-spacing: 1px;
+            margin-bottom: 2px;
+            display: block;
+        }
+
+        .headline-row {
+            display: flex;
+            align-items: flex-end;
+            gap: 0;
+        }
+
+        .h-kumpir {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 108px;
+            line-height: 0.88;
+            color: #fff;
+            letter-spacing: 3px;
+            text-shadow:
+                5px 5px 0 #FF6B00,
+                10px 10px 0 rgba(255,61,0,0.3);
+            position: relative;
+            z-index: 2;
+        }
+
+        .h-potato {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 108px;
+            line-height: 0.88;
+            color: #FF6B00;
+            letter-spacing: 3px;
+            -webkit-text-stroke: 2px #FF3D00;
+            text-shadow: 5px 5px 0 rgba(0,0,0,0.5);
+            position: relative;
+            z-index: 2;
+        }
+
+        .headline-cafe {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 50px;
+            color: #fff;
+            letter-spacing: 14px;
+            margin-top: 4px;
+            border-left: 6px solid #FF6B00;
+            padding-left: 14px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .cafe-line {
+            flex: 1;
+            height: 2px;
+            background: linear-gradient(to right, #FF6B00, transparent);
+        }
+
+        /* ══════════════════════════════════════
+           ZONE 3 — OFFER BADGES
+        ══════════════════════════════════════ */
+        .offer-zone {
+            padding: 16px 30px;
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            position: relative;
+            z-index: 5;
+            background: #1A1A1A;
+        }
+
+        .bogo-badge {
+            background: linear-gradient(135deg, #FF6B00, #FF3D00);
+            padding: 12px 22px;
+            clip-path: polygon(10px 0%, 100% 0%, calc(100% - 10px) 100%, 0% 100%);
+            text-align: center;
+            min-width: 185px;
+            box-shadow: 0 8px 24px rgba(255,107,0,0.4);
+            position: relative;
+        }
+
+        .bogo-badge::before {
+            content: '★  LIMITED OFFER  ★';
+            position: absolute;
+            top: -18px; left: 50%;
+            transform: translateX(-50%);
+            font-size: 9px;
+            color: #FF6B00;
+            letter-spacing: 2px;
+            white-space: nowrap;
+            font-family: 'Oswald', sans-serif;
+            font-weight: 600;
+        }
+
+        .bogo-line1 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 40px;
+            color: white;
+            letter-spacing: 4px;
+            line-height: 1;
+        }
+
+        .bogo-line2 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 22px;
+            color: #fff;
+            letter-spacing: 6px;
+            background: rgba(0,0,0,0.25);
+            margin: 2px -22px -12px;
+            padding: 2px 22px;
+        }
+
+        .discount-circle {
+            width: 100px; height: 100px;
+            background: #0D0D0D;
+            border: 3px solid #FF6B00;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            flex-shrink: 0;
+            box-shadow: 0 0 20px rgba(255,107,0,0.3), inset 0 0 20px rgba(255,107,0,0.05);
+        }
+
+        .discount-circle::before {
+            content: '';
+            position: absolute;
+            inset: 5px;
+            border: 1.5px dashed rgba(255,107,0,0.5);
+            border-radius: 50%;
+        }
+
+        .dc-upto { font-size: 9px; color: #FF6B00; letter-spacing: 1px; font-weight: 700; }
+        .dc-pct {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 36px; color: #fff; line-height: 1;
+        }
+        .dc-off { font-size: 9px; color: #FF6B00; letter-spacing: 3px; font-weight: 700; }
+
+        .delivery-tag {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            color: #ccc;
+        }
+
+        .delivery-arrow-box {
+            width: 32px; height: 32px;
+            border: 2px solid #FF6B00;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            color: #FF6B00; font-size: 16px;
+            margin-bottom: 4px;
+        }
+
+        .delivery-text {
+            font-size: 11px;
+            color: #bbb;
+            letter-spacing: 0.5px;
+            line-height: 1.5;
+        }
+
+        /* ══════════════════════════════════════
+           ZONE 4 — HERO FOOD VISUAL
+        ══════════════════════════════════════ */
+        .hero-zone {
+            height: 360px;
+            background:
+                radial-gradient(ellipse 70% 60% at 50% 80%, rgba(255,107,0,0.22) 0%, transparent 70%),
+                radial-gradient(ellipse 40% 30% at 50% 95%, rgba(255,61,0,0.15) 0%, transparent 60%),
+                #1A1A1A;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Background texture dots */
+        .hero-zone::before {
+            content: '';
+            position: absolute; inset: 0;
+            background-image: radial-gradient(circle, rgba(255,107,0,0.06) 1px, transparent 1px);
+            background-size: 28px 28px;
+        }
+
+        /* Splatter blobs */
+        .splat {
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+        }
+        .splat-1 { width: 220px; height: 220px; background: #FF6B00; opacity: 0.05; top: -60px; left: -70px; }
+        .splat-2 { width: 160px; height: 160px; background: #FF3D00; opacity: 0.06; bottom: -40px; right: -50px; }
+        .splat-3 { width: 80px; height: 80px; background: #FF6B00; opacity: 0.08; top: 20px; right: 60px; }
+
+        /* Floating spice particles */
+        .spark {
+            position: absolute;
+            border-radius: 50%;
+            animation: sparkFloat 3.5s infinite ease-in-out;
+        }
+        @keyframes sparkFloat {
+            0%, 100% { transform: translateY(0) scale(1); opacity: 0.9; }
+            50% { transform: translateY(-18px) scale(0.7); opacity: 0.3; }
+        }
+
+        .sk1 { width: 9px; height: 9px; background: #FF6B00; top: 18%; left: 12%; animation-delay: 0s; }
+        .sk2 { width: 6px; height: 6px; background: #FFB300; top: 28%; right: 16%; animation-delay: 0.6s; }
+        .sk3 { width: 12px; height: 12px; background: #FF3D00; top: 12%; right: 28%; animation-delay: 1.1s; }
+        .sk4 { width: 5px; height: 5px; background: #FF6B00; bottom: 25%; left: 22%; animation-delay: 1.7s; }
+        .sk5 { width: 8px; height: 8px; background: #FFB300; bottom: 18%; right: 12%; animation-delay: 0.9s; }
+        .sk6 { width: 4px; height: 4px; background: #FF6B00; top: 48%; left: 8%; animation-delay: 2.2s; }
+        .sk7 { width: 7px; height: 7px; background: #FF3D00; top: 35%; left: 30%; animation-delay: 0.4s; }
+
+        .kumpir-svg-wrap {
+            width: 380px;
+            position: relative;
+            z-index: 5;
+            filter:
+                drop-shadow(0 12px 30px rgba(255,107,0,0.5))
+                drop-shadow(0 4px 8px rgba(0,0,0,0.8));
+        }
+
+        /* ══════════════════════════════════════
+           DIAGONAL SLASH — BOTTOM
+        ══════════════════════════════════════ */
+        .slash-bottom {
+            width: 100%; height: 36px;
+            background: #FF6B00;
+            clip-path: polygon(0 45%, 100% 0, 100% 100%, 0 100%);
+            position: relative; z-index: 5;
+        }
+
+        /* ══════════════════════════════════════
+           ZONE 5 — RECIPE CARDS
+        ══════════════════════════════════════ */
+        .recipes-zone {
+            background: #0D0D0D;
+            padding: 28px 22px 22px;
+            position: relative;
+            z-index: 5;
+        }
+
+        .recipes-heading {
+            text-align: center;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 18px;
+            color: #FF6B00;
+            letter-spacing: 6px;
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .recipes-heading::before,
+        .recipes-heading::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(to right, transparent, #FF6B00);
+        }
+        .recipes-heading::after {
+            background: linear-gradient(to left, transparent, #FF6B00);
+        }
+
+        .recipes-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+        .recipe-card {
+            background: #1A1A1A;
+            border: 1px solid #252525;
+            border-left: 5px solid #FF6B00;
+            padding: 14px 16px 12px;
+            position: relative;
+            clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% 100%, 0 100%);
+            transition: transform 0.2s;
+        }
+
+        .recipe-card::after {
+            content: '';
+            position: absolute; top: 0; right: 0;
+            width: 0; height: 0;
+            border-style: solid;
+            border-width: 0 14px 14px 0;
+            border-color: transparent #FF6B00 transparent transparent;
+        }
+
+        .recipe-card::before {
+            content: '';
+            position: absolute; inset: 0;
+            background: linear-gradient(135deg, rgba(255,107,0,0.04) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .recipe-icon { font-size: 26px; margin-bottom: 7px; display: block; }
+
+        .recipe-name {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 21px;
+            color: #fff;
+            letter-spacing: 1.5px;
+            line-height: 1;
+        }
+
+        .recipe-ingredients {
+            font-size: 9.5px;
+            color: #777;
+            letter-spacing: 0.3px;
+            margin-top: 5px;
+            line-height: 1.5;
+            font-family: 'Oswald', sans-serif;
+            font-weight: 400;
+        }
+
+        .recipe-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 10px;
+            padding-top: 8px;
+            border-top: 1px solid #252525;
+        }
+
+        .recipe-old-price {
+            font-size: 11px;
+            color: #444;
+            text-decoration: line-through;
+            font-family: 'Oswald', sans-serif;
+        }
+
+        .recipe-new-price {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 24px;
+            color: #FF6B00;
+            line-height: 1;
+        }
+
+        .recipe-new-price span {
+            font-size: 13px;
+            font-family: 'Oswald', sans-serif;
+            font-weight: 600;
+        }
+
+        .recipe-badge {
+            font-size: 8px;
+            background: #FF6B00;
+            color: white;
+            padding: 2px 6px;
+            letter-spacing: 1px;
+            font-weight: 700;
+        }
+
+        /* ══════════════════════════════════════
+           ZONE 6 — CTA BUTTON
+        ══════════════════════════════════════ */
+        .cta-zone {
+            background: #0D0D0D;
+            padding: 16px 30px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            position: relative;
+            z-index: 5;
+        }
+
+        .cta-btn {
+            background: linear-gradient(135deg, #FF6B00, #FF3D00);
+            color: white;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 30px;
+            letter-spacing: 6px;
+            padding: 16px 52px;
+            clip-path: polygon(12px 0%, 100% 0%, calc(100% - 12px) 100%, 0% 100%);
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            text-decoration: none;
+            box-shadow: 0 8px 28px rgba(255,107,0,0.45);
+            cursor: pointer;
+            border: none;
+        }
+
+        .cta-circle {
+            width: 38px; height: 38px;
+            background: white;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            color: #FF6B00;
+            font-size: 20px;
+            font-weight: 900;
+            font-family: Arial, sans-serif;
+            flex-shrink: 0;
+        }
+
+        /* ══════════════════════════════════════
+           ZONE 7 — FOOTER
+        ══════════════════════════════════════ */
+        .footer {
+            background: linear-gradient(135deg, #FF6B00, #FF3D00);
+            padding: 14px 30px 22px;
+            text-align: center;
+            clip-path: polygon(0 30%, 100% 0, 100% 100%, 0 100%);
+            padding-top: 28px;
+            position: relative;
+            z-index: 5;
+        }
+
+        .footer-phone {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 30px;
+            color: white;
+            letter-spacing: 5px;
+        }
+
+        .footer-website {
+            font-family: 'Oswald', sans-serif;
+            font-size: 12px;
+            color: rgba(255,255,255,0.85);
+            letter-spacing: 3px;
+            font-weight: 400;
+            margin-top: 3px;
+        }
+
+        /* ══ PRINT GUIDE ══ */
+        .print-note {
+            margin-top: 24px;
+            color: #444;
+            font-size: 11px;
+            letter-spacing: 2px;
+            text-align: center;
+            font-family: 'Oswald', sans-serif;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="page-label">⚡ TURKISH FIRE — OUTDOOR ROLL-UP POSTER ⚡</div>
+
+    <div class="poster">
+
+        <!-- Ambient glows -->
+        <div class="glow-left"></div>
+        <div class="glow-right"></div>
+
+        <!-- ══ ZONE 1: HEADER ══ -->
+        <div class="header">
+            <div class="logo-wrap">
+                <div class="logo-icon-box">🥔</div>
+                <div class="logo-text-block">
+                    <div class="brand">KUMPIR</div>
+                    <div class="sub-brand">POTATO CAFÉ</div>
+                </div>
+            </div>
+            <div class="social-block">
+                <div class="follow-label">Follow Us Now</div>
+                <div class="social-row">
+                    <div class="s-icon">f</div>
+                    <div class="s-icon">▶</div>
+                    <div class="s-icon">📷</div>
+                    <div class="s-icon">𝕏</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ══ DIAGONAL SLASH TOP ══ -->
+        <div class="slash-top"></div>
+
+        <!-- ══ ZONE 2: HEADLINE ══ -->
+        <div class="headline-zone">
+            <div class="headline-fire-glow"></div>
+            <span class="script-line">Authentic Turkish</span>
+            <div class="h-kumpir">KUMPIR</div>
+            <div class="h-potato">POTATO</div>
+            <div class="headline-cafe">
+                CAFÉ
+                <div class="cafe-line"></div>
+            </div>
+        </div>
+
+        <!-- ══ ZONE 3: OFFER BADGES ══ -->
+        <div class="offer-zone">
+            <div class="bogo-badge">
+                <div class="bogo-line1">BUY 1 GET 1</div>
+                <div class="bogo-line2">★ FREE ★</div>
+            </div>
+
+            <div class="discount-circle">
+                <span class="dc-upto">upto</span>
+                <span class="dc-pct">25%</span>
+                <span class="dc-off">OFF</span>
+            </div>
+
+            <div class="delivery-tag">
+                <div class="delivery-arrow-box">↑</div>
+                <div class="delivery-text">Free Home<br>Delivery</div>
+            </div>
+        </div>
+
+        <!-- ══ ZONE 4: HERO FOOD VISUAL ══ -->
+        <div class="hero-zone">
+            <!-- Background elements -->
+            <div class="splat splat-1"></div>
+            <div class="splat splat-2"></div>
+            <div class="splat splat-3"></div>
+
+            <!-- Floating sparks -->
+            <div class="spark sk1"></div>
+            <div class="spark sk2"></div>
+            <div class="spark sk3"></div>
+            <div class="spark sk4"></div>
+            <div class="spark sk5"></div>
+            <div class="spark sk6"></div>
+            <div class="spark sk7"></div>
+
+            <!-- Kumpir Potato Illustration (SVG) -->
+            <div class="kumpir-svg-wrap">
+                <svg viewBox="0 0 380 300" xmlns="http://www.w3.org/2000/svg">
+
+                    <!-- ── Ground shadow ── -->
+                    <ellipse cx="190" cy="283" rx="140" ry="16" fill="rgba(0,0,0,0.5)"/>
+
+                    <!-- ── Plate ── -->
+                    <ellipse cx="190" cy="268" rx="155" ry="22" fill="#0f0f0f"/>
+                    <ellipse cx="190" cy="264" rx="148" ry="18" fill="#181818"/>
+                    <ellipse cx="190" cy="262" rx="140" ry="14" fill="#212121"/>
+
+                    <!-- ── Potato Bottom Half ── -->
+                    <ellipse cx="190" cy="235" rx="128" ry="42" fill="#4A2810"/>
+                    <ellipse cx="190" cy="230" rx="128" ry="40" fill="#6B3A1F"/>
+                    <ellipse cx="190" cy="225" rx="125" ry="37" fill="#7A4525"/>
+
+                    <!-- Skin texture lines -->
+                    <path d="M 75 235 Q 190 218 305 235" stroke="#5A3218" stroke-width="2" fill="none" opacity="0.7"/>
+                    <path d="M 85 245 Q 190 230 295 245" stroke="#5A3218" stroke-width="1.5" fill="none" opacity="0.4"/>
+
+                    <!-- ── Potato Top Half (baked jacket) ── -->
+                    <ellipse cx="190" cy="190" rx="122" ry="52" fill="#8B5E30"/>
+                    <ellipse cx="190" cy="184" rx="120" ry="50" fill="#A06C38"/>
+
+                    <!-- Skin highlights -->
+                    <ellipse cx="155" cy="172" rx="40" ry="18" fill="#B87D45" opacity="0.5"/>
+                    <ellipse cx="230" cy="178" rx="30" ry="12" fill="#C08040" opacity="0.3"/>
+
+                    <!-- ── Split / Opening ── -->
+                    <path d="M 85 178 Q 140 158 190 155 Q 240 158 305 178" stroke="#3D1A08" stroke-width="5" fill="none"/>
+                    <path d="M 85 178 Q 140 168 190 165 Q 240 168 305 178" stroke="#5A2A10" stroke-width="2" fill="none" opacity="0.5"/>
+
+                    <!-- ── Fluffy White Interior ── -->
+                    <ellipse cx="190" cy="158" rx="100" ry="38" fill="#F8EDD8"/>
+                    <ellipse cx="190" cy="153" rx="95" ry="33" fill="#FFFBF0"/>
+
+                    <!-- Interior texture -->
+                    <ellipse cx="165" cy="148" rx="28" ry="10" fill="#FFF5E0" opacity="0.8"/>
+                    <ellipse cx="215" cy="152" rx="22" ry="8" fill="#FFF5E0" opacity="0.6"/>
+
+                    <!-- ── Melting Butter ── -->
+                    <ellipse cx="178" cy="148" rx="30" ry="14" fill="#FFD700" opacity="0.85"/>
+                    <path d="M 165 148 Q 170 162 185 168 Q 175 158 165 148" fill="#FFB300" opacity="0.7"/>
+                    <path d="M 185 150 Q 188 165 194 172" stroke="#FFC000" stroke-width="2" fill="none" opacity="0.6"/>
+
+                    <!-- ── Melted Cheese ── -->
+                    <path d="M 100 148 Q 145 130 185 142 Q 165 158 100 148" fill="#FFD700" opacity="0.9"/>
+                    <path d="M 185 142 Q 200 148 215 138 Q 205 155 185 142" fill="#FFC107" opacity="0.7"/>
+
+                    <!-- ── Sausage Slices ── -->
+                    <circle cx="238" cy="140" r="17" fill="#7A1C00"/>
+                    <circle cx="238" cy="140" r="13" fill="#AD2C00"/>
+                    <circle cx="238" cy="140" r="5" fill="#7A1C00"/>
+                    <circle cx="238" cy="140" r="2" fill="#C53500"/>
+
+                    <circle cx="262" cy="152" r="14" fill="#7A1C00"/>
+                    <circle cx="262" cy="152" r="10" fill="#AD2C00"/>
+                    <circle cx="262" cy="152" r="4" fill="#7A1C00"/>
+
+                    <!-- ── Corn Kernels ── -->
+                    <ellipse cx="125" cy="140" rx="5.5" ry="6" fill="#FFE000"/>
+                    <ellipse cx="137" cy="135" rx="5.5" ry="6" fill="#FFD700"/>
+                    <ellipse cx="149" cy="132" rx="5.5" ry="6" fill="#FFE000"/>
+                    <ellipse cx="128" cy="151" rx="5.5" ry="6" fill="#FFD700"/>
+                    <ellipse cx="140" cy="146" rx="5.5" ry="6" fill="#FFE000"/>
+                    <ellipse cx="152" cy="143" rx="5.5" ry="6" fill="#FFD700"/>
+
+                    <!-- ── Black Olives ── -->
+                    <ellipse cx="115" cy="155" rx="10" ry="6" fill="#1A1A00"/>
+                    <ellipse cx="115" cy="155" rx="4" ry="6" fill="#3D3D00"/>
+                    <ellipse cx="178" cy="133" rx="8" ry="5" fill="#1A1A00"/>
+                    <ellipse cx="178" cy="133" rx="3" ry="5" fill="#3D3D00"/>
+
+                    <!-- ── Sour Cream ── -->
+                    <ellipse cx="286" cy="130" rx="22" ry="15" fill="white" opacity="0.92"/>
+                    <path d="M 275 127 Q 286 120 297 127 Q 291 136 275 127" fill="#F5F5F5" opacity="0.7"/>
+
+                    <!-- ── Green Herbs / Peas ── -->
+                    <circle cx="218" cy="128" r="5.5" fill="#3E8C30"/>
+                    <circle cx="230" cy="122" r="4.5" fill="#4CAF50"/>
+                    <circle cx="210" cy="136" r="4" fill="#3E8C30"/>
+                    <circle cx="222" cy="118" r="3.5" fill="#66BB6A"/>
+
+                    <!-- ── Ketchup / Red Sauce Drizzle ── -->
+                    <path d="M 200 135 Q 205 152 200 168" stroke="#E53935" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+                    <path d="M 185 138 Q 182 155 186 170" stroke="#FF5722" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+
+                    <!-- ── Paprika Sprinkle ── -->
+                    <circle cx="107" cy="142" r="2.5" fill="#FF6B00" opacity="0.9"/>
+                    <circle cx="160" cy="125" r="2" fill="#FF3D00" opacity="0.8"/>
+                    <circle cx="245" cy="118" r="2" fill="#FF6B00" opacity="0.9"/>
+                    <circle cx="196" cy="118" r="2.5" fill="#FF3D00" opacity="0.7"/>
+                    <circle cx="147" cy="113" r="2" fill="#FF6B00" opacity="0.8"/>
+                    <circle cx="272" cy="140" r="2" fill="#FF6B00" opacity="0.7"/>
+
+                    <!-- ── Steam Wisps ── -->
+                    <path d="M 145 102 Q 138 80 146 64 Q 152 52 147 38" stroke="rgba(255,255,255,0.22)" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+                    <path d="M 190 94 Q 183 70 190 54 Q 196 42 191 26" stroke="rgba(255,255,255,0.18)" stroke-width="3" fill="none" stroke-linecap="round"/>
+                    <path d="M 235 100 Q 242 78 234 62 Q 228 50 234 36" stroke="rgba(255,255,255,0.15)" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+
+                    <!-- Steam animation hint circles -->
+                    <circle cx="146" cy="38" r="5" fill="rgba(255,255,255,0.06)"/>
+                    <circle cx="191" cy="26" r="7" fill="rgba(255,255,255,0.05)"/>
+                    <circle cx="234" cy="36" r="5" fill="rgba(255,255,255,0.04)"/>
+
+                    <!-- ── Spice ring glow ── -->
+                    <ellipse cx="190" cy="200" rx="135" ry="25" fill="rgba(255,107,0,0.08)"/>
+                </svg>
+            </div>
+        </div>
+
+        <!-- ══ DIAGONAL SLASH BOTTOM ══ -->
+        <div class="slash-bottom"></div>
+
+        <!-- ══ ZONE 5: RECIPE CARDS ══ -->
+        <div class="recipes-zone">
+            <div class="recipes-heading">OUR SIGNATURE RECIPES</div>
+
+            <div class="recipes-grid">
+
+                <!-- Card 1: Classic Turkish -->
+                <div class="recipe-card">
+                    <span class="recipe-icon">🥔</span>
+                    <div class="recipe-name">Classic Turkish</div>
+                    <div class="recipe-ingredients">Butter · Cheddar · Olives<br>Corn · Sausage · Pickles</div>
+                    <div class="recipe-footer">
+                        <div>
+                            <div class="recipe-old-price">4.67 ر.س</div>
+                            <div class="recipe-new-price">3.5 <span>ر.س</span></div>
+                        </div>
+                        <div class="recipe-badge">25% OFF</div>
+                    </div>
+                </div>
+
+                <!-- Card 2: BBQ Loaded -->
+                <div class="recipe-card">
+                    <span class="recipe-icon">🍗</span>
+                    <div class="recipe-name">BBQ Loaded</div>
+                    <div class="recipe-ingredients">BBQ Sauce · Grilled Chicken<br>Cheddar · Caramelized Onion</div>
+                    <div class="recipe-footer">
+                        <div>
+                            <div class="recipe-old-price">4.67 ر.س</div>
+                            <div class="recipe-new-price">3.5 <span>ر.س</span></div>
+                        </div>
+                        <div class="recipe-badge">25% OFF</div>
+                    </div>
+                </div>
+
+                <!-- Card 3: Spicy Fiesta -->
+                <div class="recipe-card">
+                    <span class="recipe-icon">🌶️</span>
+                    <div class="recipe-name">Spicy Fiesta</div>
+                    <div class="recipe-ingredients">Jalapeños · Spicy Beef<br>Salsa · Sour Cream</div>
+                    <div class="recipe-footer">
+                        <div>
+                            <div class="recipe-old-price">4.67 ر.س</div>
+                            <div class="recipe-new-price">3.5 <span>ر.س</span></div>
+                        </div>
+                        <div class="recipe-badge">25% OFF</div>
+                    </div>
+                </div>
+
+                <!-- Card 4: Mediterranean -->
+                <div class="recipe-card">
+                    <span class="recipe-icon">🫒</span>
+                    <div class="recipe-name">Mediterranean</div>
+                    <div class="recipe-ingredients">Feta · Sun-Dried Tomato<br>Hummus · Fresh Herbs</div>
+                    <div class="recipe-footer">
+                        <div>
+                            <div class="recipe-old-price">4.67 ر.س</div>
+                            <div class="recipe-new-price">3.5 <span>ر.س</span></div>
+                        </div>
+                        <div class="recipe-badge">25% OFF</div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ══ ZONE 6: CTA ══ -->
+        <div class="cta-zone">
+            <div class="cta-btn">
+                <div class="cta-circle">→</div>
+                ORDER NOW
+            </div>
+        </div>
+
+        <!-- ══ ZONE 7: FOOTER ══ -->
+        <div class="footer">
+            <div class="footer-phone">102-202-4545</div>
+            <div class="footer-website">WWW.KUMPIRCAFE.COM</div>
+        </div>
+
+    </div>
+
+    <div class="print-note">Print Ready · 85cm × 200cm · 300 DPI · Bleed 5mm · CMYK</div>
+
+</body>
+</html>
