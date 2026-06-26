@@ -735,3 +735,536 @@ Clean code should:
 * Be easy to remove if requirements change.
 
 Future contributors should understand the implementation with minimal additional explanation.
+
+---
+
+## Section 3 — Project Architecture & Repository Organization
+
+Version: 1.0 (Enterprise)
+
+---
+
+## Objective
+
+Design software that is:
+
+* Modular
+* Scalable
+* Maintainable
+* Secure
+* Testable
+* Observable
+* Easy to extend
+* Easy to replace
+
+Architecture should reduce complexity rather than introduce it.
+
+---
+
+## Architecture Philosophy
+
+The architecture must prioritize:
+
+1. Clear boundaries
+2. Loose coupling
+3. High cohesion
+4. Independent modules
+5. Explicit dependencies
+6. Predictable data flow
+7. Replaceable components
+8. Business logic independent of frameworks
+
+Frameworks are implementation details — not the architecture.
+
+---
+
+## Preferred Architecture
+
+Unless project requirements dictate otherwise, use Clean Architecture with supporting principles from Domain-Driven Design (DDD) and Hexagonal Architecture.
+
+Layers:
+
+```
+Presentation Layer
+        │
+Application Layer
+        │
+Domain Layer
+        │
+Infrastructure Layer
+```
+
+Dependency Rule:
+
+* Outer layers depend on inner layers.
+* Inner layers must never depend on outer layers.
+
+Business logic must remain framework-independent.
+
+---
+
+## Layer Responsibilities
+
+### Presentation Layer
+
+Responsibilities:
+
+* HTTP APIs
+* CLI commands
+* UI components
+* Request validation
+* Authentication entry points
+* Response formatting
+
+Never place business rules here.
+
+### Application Layer
+
+Responsibilities:
+
+* Use cases
+* Application services
+* Orchestration
+* Transactions
+* Workflow coordination
+
+Should coordinate business logic, not implement it.
+
+### Domain Layer
+
+Contains:
+
+* Entities
+* Value Objects
+* Domain Services
+* Business Rules
+* Domain Events
+* Repository Interfaces
+
+The domain layer must have zero knowledge of databases, web frameworks, or external services.
+
+### Infrastructure Layer
+
+Contains:
+
+* Database implementations
+* External APIs
+* Email providers
+* File storage
+* Message queues
+* Authentication providers
+* Logging
+* Monitoring
+
+Infrastructure implements interfaces defined by the domain.
+
+---
+
+## Dependency Rules
+
+Allowed:
+
+```
+Presentation
+      ↓
+Application
+      ↓
+Domain
+Infrastructure
+      ↓
+Domain Interfaces
+```
+
+Forbidden:
+
+* Domain importing framework code
+* Domain importing SQL libraries
+* Domain importing HTTP clients
+* Domain importing UI libraries
+
+The domain must remain portable.
+
+---
+
+## Repository Organization
+
+Use a feature-first structure whenever practical.
+
+Example:
+
+```
+project/
+  docs/
+  apps/
+    web/
+    api/
+    mobile/
+  packages/
+    shared/
+    ui/
+    config/
+    auth/
+    database/
+  services/
+  scripts/
+  infrastructure/
+  docker/
+  .github/
+  tests/
+```
+
+Avoid organizing solely by file type.
+
+---
+
+## Backend Structure
+
+```
+src/
+  modules/
+    auth/
+    users/
+    billing/
+    orders/
+    inventory/
+  shared/
+  config/
+  database/
+  middleware/
+  utils/
+  tests/
+```
+
+Each module owns its:
+
+* Controllers
+* Services
+* Domain
+* DTOs
+* Validators
+* Tests
+
+---
+
+## Frontend Structure
+
+```
+src/
+  app/
+  components/
+  features/
+  hooks/
+  services/
+  styles/
+  assets/
+  types/
+  utils/
+  tests/
+```
+
+Organize by feature instead of by component type whenever possible.
+
+---
+
+## Module Boundaries
+
+Each module should expose a minimal public API.
+
+Example:
+
+```
+billing/
+  index.ts
+  service.ts
+  repository.ts
+  entities/
+  dto/
+  tests/
+```
+
+Other modules import only through `index.ts`.
+
+Avoid deep imports into internal implementation files.
+
+---
+
+## Shared Code
+
+Only place code in `shared/` if it is genuinely reusable across multiple modules.
+
+Do not create a "shared" folder as a dumping ground.
+
+---
+
+## Configuration
+
+Separate configuration from code.
+
+Example:
+
+```
+config/
+  app.ts
+  database.ts
+  cache.ts
+  email.ts
+  storage.ts
+  security.ts
+```
+
+Configuration must support:
+
+* Development
+* Testing
+* Staging
+* Production
+
+---
+
+## Environment Variables
+
+Rules:
+
+* Never commit secrets.
+* Validate all required variables at startup.
+* Provide sensible defaults only for local development.
+* Fail fast when required configuration is missing.
+
+Example:
+
+```
+.env.example
+.env.local
+.env.development
+.env.production
+```
+
+---
+
+## API Organization
+
+Group endpoints by domain.
+
+Good:
+
+```
+/api/users
+/api/orders
+/api/products
+/api/payments
+```
+
+Avoid large, catch-all controllers.
+
+---
+
+## Domain Events
+
+Use domain events when:
+
+* Business processes trigger additional actions.
+* Multiple services react to the same event.
+* Workflows are asynchronous.
+
+Examples:
+
+* `UserRegistered`
+* `OrderPaid`
+* `InvoiceGenerated`
+* `PasswordResetRequested`
+
+Keep events immutable.
+
+---
+
+## Dependency Injection
+
+Prefer constructor injection.
+
+Avoid:
+
+* Global state
+* Singleton abuse
+* Service locators
+
+Dependencies should be explicit and easy to mock.
+
+---
+
+## Error Architecture
+
+Define a centralized error model.
+
+Categories:
+
+* `ValidationError`
+* `AuthenticationError`
+* `AuthorizationError`
+* `NotFoundError`
+* `ConflictError`
+* `BusinessRuleError`
+* `ExternalServiceError`
+* `DatabaseError`
+* `InternalServerError`
+
+Never expose stack traces to end users.
+
+---
+
+## Logging Architecture
+
+Centralize logging.
+
+Every log entry should include:
+
+* Timestamp
+* Severity
+* Service name
+* Request ID / Correlation ID
+* User ID (when appropriate)
+* Context
+
+Support structured logs (JSON) in production.
+
+---
+
+## Caching Strategy
+
+Cache only where it provides measurable value.
+
+Preferred cache targets:
+
+* Read-heavy queries
+* External API responses
+* Session data
+* Computed reports
+
+Define expiration policies explicitly.
+
+---
+
+## Database Layer
+
+Repositories should abstract persistence.
+
+Business logic must not know whether data comes from:
+
+* PostgreSQL
+* MySQL
+* MongoDB
+* Redis
+* REST API
+* GraphQL
+* Local files
+
+Persistence is an implementation detail.
+
+---
+
+## Asynchronous Processing
+
+Use queues for:
+
+* Emails
+* Notifications
+* File processing
+* Report generation
+* AI inference
+* Long-running tasks
+
+Do not block user requests unnecessarily.
+
+---
+
+## Monorepo Standards
+
+Preferred structure:
+
+```
+apps/
+packages/
+services/
+libs/
+docs/
+tools/
+infrastructure/
+```
+
+Shared packages must be versioned and documented.
+
+Avoid circular dependencies between packages.
+
+---
+
+## Documentation Structure
+
+Every repository should contain:
+
+```
+README.md
+CONTRIBUTING.md
+CHANGELOG.md
+LICENSE
+SECURITY.md
+CODE_OF_CONDUCT.md
+CLAUDE.md
+```
+
+Architecture documentation belongs in:
+
+```
+docs/architecture/
+```
+
+Include diagrams and Architecture Decision Records (ADRs) for significant technical choices.
+
+---
+
+## Scalability Principles
+
+Design modules to evolve independently.
+
+Support:
+
+* Horizontal scaling
+* Stateless services
+* Background workers
+* Event-driven communication
+* Feature flags
+* Versioned APIs
+
+Avoid premature microservices; begin with a well-structured modular monolith unless clear scaling requirements justify service separation.
+
+---
+
+## Architecture Review Checklist
+
+Before approving any architectural change, verify:
+
+* Responsibilities are clearly separated.
+* Module boundaries are respected.
+* Dependencies point inward.
+* Business logic is framework-independent.
+* Shared code is genuinely reusable.
+* Configuration is externalized.
+* Secrets are never stored in code.
+* Public APIs are stable.
+* Components are independently testable.
+* The design remains simple while supporting future growth.
+
+---
+
+## Definition of Good Architecture
+
+A well-designed architecture should:
+
+* Be understandable by new contributors.
+* Allow features to evolve independently.
+* Minimize coupling.
+* Maximize cohesion.
+* Support automated testing.
+* Enable safe refactoring.
+* Remain adaptable as requirements change.
+* Keep business rules isolated from implementation details.
+
+Architecture should help developers move faster over time — not slow them down.
