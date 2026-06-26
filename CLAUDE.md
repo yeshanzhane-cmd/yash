@@ -272,3 +272,466 @@ A task is considered complete only when it is:
 * Ready for peer review
 
 Always aim to produce work that requires minimal revision before real-world use.
+
+---
+
+## Section 2 — Engineering Principles & Coding Standards
+
+---
+
+## Objective
+
+Every line of code should be:
+
+* Correct
+* Readable
+* Maintainable
+* Secure
+* Testable
+* Performant
+* Scalable
+* Self-explanatory
+
+Code is written for humans first and computers second.
+
+---
+
+## Engineering Philosophy
+
+Prefer:
+
+* Simplicity over cleverness
+* Readability over brevity
+* Composition over inheritance
+* Explicit behavior over implicit behavior
+* Small reusable modules over large files
+* Pure functions where practical
+* Immutable data when appropriate
+* Clear interfaces between components
+
+Avoid unnecessary abstraction until it solves a real problem.
+
+---
+
+## Software Design Principles
+
+Every project should follow:
+
+### SOLID
+
+* Single Responsibility Principle
+* Open/Closed Principle
+* Liskov Substitution Principle
+* Interface Segregation Principle
+* Dependency Inversion Principle
+
+### DRY
+
+Do not duplicate:
+
+* Business logic
+* Validation
+* Configuration
+* Constants
+* Utility functions
+
+Refactor repeated logic into reusable modules.
+
+### KISS
+
+Choose the simplest solution that fully satisfies the requirements.
+
+Avoid unnecessary:
+
+* Frameworks
+* Layers
+* Patterns
+* Configuration
+* Dependencies
+
+### YAGNI
+
+Do not build speculative features.
+
+Implement only what is currently required while designing for future extension.
+
+---
+
+## Naming Conventions
+
+Names should clearly communicate intent.
+
+### Variables
+
+Good:
+
+```
+customerName
+invoiceTotal
+retryCount
+```
+
+Bad:
+
+```
+x
+tmp
+data2
+abc
+```
+
+### Functions
+
+Function names should describe actions.
+
+Examples:
+
+```
+calculateTotal()
+validateEmail()
+generateInvoice()
+fetchOrders()
+createUser()
+deleteFile()
+sendNotification()
+```
+
+### Classes
+
+Use nouns.
+
+Examples:
+
+```
+InvoiceService
+EmailSender
+PaymentProcessor
+UserRepository
+```
+
+### Constants
+
+Use uppercase.
+
+```
+MAX_RETRIES
+DEFAULT_TIMEOUT
+API_VERSION
+```
+
+### Files
+
+Use consistent naming.
+
+Preferred:
+
+```
+user-service.ts
+payment_processor.py
+auth.controller.ts
+database.ts
+config.py
+```
+
+---
+
+## Function Guidelines
+
+Functions should:
+
+* Perform one responsibility
+* Be predictable
+* Have descriptive names
+* Avoid side effects where possible
+* Return consistent types
+
+Ideal length: 20–40 lines.
+
+If a function exceeds ~60 lines, consider refactoring.
+
+---
+
+## Class Guidelines
+
+Classes should:
+
+* Have one responsibility
+* Hide implementation details
+* Expose clear public interfaces
+* Favor dependency injection
+* Avoid unnecessary inheritance
+
+---
+
+## File Organization
+
+Each file should have one primary purpose.
+
+Avoid files exceeding approximately 500 lines unless justified.
+
+Split by feature rather than by arbitrary type when possible.
+
+---
+
+## Folder Organization
+
+Organize projects by feature or domain instead of technical layers alone.
+
+Example:
+
+```
+src/
+  auth/
+  billing/
+  users/
+  notifications/
+  shared/
+  config/
+  database/
+  tests/
+```
+
+---
+
+## Comments
+
+Prefer self-explanatory code.
+
+Comments should explain why, not what.
+
+Good:
+
+```
+# Retrying avoids failures caused by temporary network interruptions.
+```
+
+Bad:
+
+```
+# Increment counter.
+```
+
+Do not leave commented-out code in the repository.
+
+---
+
+## Documentation
+
+Every public module should include:
+
+* Purpose
+* Inputs
+* Outputs
+* Side effects
+* Error behavior
+
+Complex algorithms should include implementation notes.
+
+---
+
+## Error Handling
+
+Never silently ignore errors.
+
+Always:
+
+* Handle expected failures
+* Return meaningful messages
+* Preserve debugging context
+* Log unexpected exceptions
+* Fail safely
+
+Avoid empty catch blocks.
+
+---
+
+## Logging Standards
+
+Logs should help diagnose problems without exposing sensitive data.
+
+Include:
+
+* Context
+* Severity
+* Timestamp
+* Correlation IDs where available
+
+Never log:
+
+* Passwords
+* Secrets
+* API keys
+* Authentication tokens
+* Credit card numbers
+* Personal data unless required and protected
+
+---
+
+## Configuration
+
+Configuration belongs outside source code.
+
+Use:
+
+* Environment variables
+* Configuration files
+* Secret managers
+
+Never hardcode:
+
+* Passwords
+* Tokens
+* Database credentials
+* Encryption keys
+
+---
+
+## Dependency Management
+
+Before adding a dependency ask:
+
+* Is it actively maintained?
+* Is it secure?
+* Is it necessary?
+* Can the functionality be implemented simply?
+* Does it increase maintenance burden?
+
+Prefer fewer, well-maintained dependencies.
+
+---
+
+## API Design
+
+APIs should be:
+
+* Predictable
+* Versioned
+* RESTful (or consistently GraphQL/gRPC where chosen)
+* Properly documented
+* Backward compatible whenever possible
+
+Use consistent:
+
+* Status codes
+* Error formats
+* Pagination
+* Filtering
+* Naming conventions
+
+---
+
+## Database Standards
+
+Prefer:
+
+* Normalized schemas
+* Indexed queries
+* Transactions where appropriate
+* Parameterized queries
+* Foreign key integrity
+* Migration-based schema changes
+
+Avoid:
+
+* N+1 queries
+* SELECT *
+* Unbounded result sets
+* Duplicate data without justification
+
+---
+
+## Performance Guidelines
+
+Optimize only after identifying bottlenecks.
+
+Prioritize:
+
+* Efficient algorithms
+* Appropriate indexing
+* Caching
+* Pagination
+* Lazy loading when beneficial
+* Asynchronous processing where appropriate
+
+Measure before optimizing.
+
+---
+
+## Security by Default
+
+Every implementation should assume hostile input.
+
+Always:
+
+* Validate inputs
+* Sanitize outputs where needed
+* Escape user-generated content
+* Use parameterized queries
+* Enforce authorization
+* Apply least privilege
+* Protect secrets
+
+---
+
+## Code Style
+
+Maintain consistent formatting across the project.
+
+Follow language-specific formatters and linters.
+
+Examples include:
+
+* Black (Python)
+* Ruff (Python)
+* ESLint (JavaScript/TypeScript)
+* Prettier (JavaScript/TypeScript)
+* Stylelint (CSS)
+
+Formatting should be automated rather than manual.
+
+---
+
+## Refactoring Rules
+
+Refactor when:
+
+* Code becomes difficult to understand
+* Duplication appears
+* Complexity increases
+* Responsibilities become unclear
+* Tests become difficult to write
+
+Refactoring should preserve behavior.
+
+---
+
+## Code Review Checklist
+
+Before submitting code, confirm:
+
+* The code solves the correct problem.
+* Naming is clear and consistent.
+* Business logic is not duplicated.
+* Errors are handled appropriately.
+* Sensitive data is protected.
+* Performance concerns are considered.
+* Documentation is updated.
+* Tests accompany new functionality.
+* The implementation is simple without sacrificing correctness.
+* The change aligns with the project's architecture.
+
+---
+
+## Definition of Clean Code
+
+Clean code should:
+
+* Read like well-written prose.
+* Reveal intent immediately.
+* Minimize surprises.
+* Be easy to test.
+* Be easy to extend.
+* Be easy to debug.
+* Be easy to remove if requirements change.
+
+Future contributors should understand the implementation with minimal additional explanation.
