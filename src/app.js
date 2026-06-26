@@ -169,9 +169,11 @@ function initVideoSwitcher() {
 
   setInterval(() => {
     current = (current + 1) % sources.length;
-    video.style.opacity = '0';
     video.style.transition = 'opacity 1.2s ease';
+    video.style.opacity = '0';
     setTimeout(() => {
+      // Remove any <source> children so setting .src takes effect
+      while (video.firstChild) video.removeChild(video.firstChild);
       video.src = sources[current];
       video.load();
       video.play().catch(() => {});

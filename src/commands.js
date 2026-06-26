@@ -214,7 +214,7 @@ const CommandCenter = (() => {
         break;
 
       case 'navigate':
-        scrollToSection(pattern.target);
+        if (typeof scrollToSection === 'function') scrollToSection(pattern.target);
         actions.push({ type: 'navigate', target: pattern.target });
         break;
 
@@ -246,15 +246,16 @@ const CommandCenter = (() => {
     if (!map) return;
     const el = document.getElementById(map.id);
     if (!el) return;
+    // Prevent double-unlock stat increment
+    if (!el.classList.contains('locked')) return;
     el.classList.add('unlocking');
     setTimeout(() => {
       el.classList.remove('locked', 'unlocking');
       el.classList.add('unlocked');
     }, 800);
-    // Activate status bar indicator
     const statusEl = document.getElementById(map.statusId);
     if (statusEl) statusEl.classList.add('active');
-    AppState.incrementStat('sectionsActive');
+    if (typeof AppState !== 'undefined') AppState.incrementStat('sectionsActive');
   }
 
   function lockSection(key) {
