@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Shop — Atelier</title>
-  <meta name="description" content="Browse the full Atelier collection — curated typefaces, UI kits, icon sets, mockups and textures for working designers.">
+  <title>Templates — E-CV Store</title>
+  <meta name="description" content="Browse all E-CV Store templates — ATS-friendly resumes, CVs, cover letter kits, portfolio templates and money-saving bundles.">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@500;600;700;800&family=Geist:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="assets/css/base.css">
   <link rel="stylesheet" href="assets/css/store.css">
@@ -17,12 +17,12 @@
 
   <nav class="nav" aria-label="Primary">
     <div class="wrap nav__inner">
-      <a class="wordmark" href="index.html">Atelier<em>.</em></a>
+      <a class="wordmark" href="index.html">E-CV <em>Store</em></a>
       <ul class="nav__links">
-        <li><a href="shop.html" aria-current="page">Shop</a></li>
+        <li><a href="shop.html" aria-current="page">Templates</a></li>
         <li><a href="index.html#categories">Categories</a></li>
         <li><a href="index.html#manifesto">About</a></li>
-        <li><a href="index.html#drops">Journal</a></li>
+        <li><a href="index.html#drops">Updates</a></li>
       </ul>
       <div class="nav__actions">
         <a class="cart-btn" href="cart.html" aria-label="Cart">
@@ -37,9 +37,9 @@
   <main>
     <header class="page-head">
       <div class="wrap">
-        <span class="eyebrow">The collection</span>
-        <h1>Every piece, one shelf</h1>
-        <p>The complete Atelier catalogue. Filter by craft, or browse it the way it was curated — slowly.</p>
+        <span class="eyebrow">The template shelf</span>
+        <h1>Every template, one shelf</h1>
+        <p>The complete E-CV catalogue. Filter by goal — every template is ATS-parse tested and recruiter-reviewed.</p>
       </div>
     </header>
 
@@ -55,23 +55,23 @@
     <div class="wrap">
       <div class="footer__grid">
         <div>
-          <a class="wordmark" href="index.html">Atelier<em>.</em></a>
-          <p>A curated marketplace of design assets, reviewed by working designers.</p>
+          <a class="wordmark" href="index.html">E-CV <em>Store</em></a>
+          <p>Premium resume, CV and career templates — ATS-proof and recruiter-tested.</p>
         </div>
         <nav aria-label="Shop">
           <h3>Shop</h3>
           <ul>
-            <li><a href="shop.html?cat=Typefaces">Typefaces</a></li>
-            <li><a href="shop.html?cat=UI%20Kits">UI Kits</a></li>
-            <li><a href="shop.html?cat=Icon%20Sets">Icon Sets</a></li>
-            <li><a href="shop.html?cat=Mockups">Mockups</a></li>
+            <li><a href="shop.html?cat=Resumes">Resumes</a></li>
+            <li><a href="shop.html?cat=CVs">CVs</a></li>
+            <li><a href="shop.html?cat=Cover%20Letters">Cover Letters</a></li>
+            <li><a href="shop.html?cat=Bundles">Bundles</a></li>
           </ul>
         </nav>
         <nav aria-label="Company">
           <h3>Company</h3>
           <ul>
             <li><a href="index.html#manifesto">About</a></li>
-            <li><a href="index.html#drops">Journal</a></li>
+            <li><a href="index.html#drops">Updates</a></li>
           </ul>
         </nav>
         <nav aria-label="Support">
@@ -83,8 +83,8 @@
         </nav>
       </div>
       <div class="footer__base">
-        <span>© 2026 Atelier. All rights reserved.</span>
-        <span>Crafted with restraint.</span>
+        <span>© 2026 E-CV Store. All rights reserved.</span>
+        <span>Designed to get you hired.</span>
       </div>
     </div>
   </footer>
@@ -106,13 +106,13 @@
           grid.innerHTML = `
             <div class="empty-state">
               <h2>Nothing on this shelf yet</h2>
-              <p>New pieces are added monthly — join the drop list to hear first.</p>
-              <a class="btn" href="index.html#drops">Join the drop list</a>
+              <p>New templates ship monthly — join the update list to hear first.</p>
+              <a class="btn" href="index.html#drops">Get notified</a>
             </div>`;
         } else {
           grid.innerHTML = items.map(p => productCardHTML(p)).join('');
         }
-        countEl.textContent = `${items.length} piece${items.length === 1 ? '' : 's'}`;
+        countEl.textContent = `${items.length} template${items.length === 1 ? '' : 's'}`;
         filters.querySelectorAll('.filter-btn').forEach(btn => {
           btn.setAttribute('aria-pressed', String(btn.dataset.cat === active));
         });

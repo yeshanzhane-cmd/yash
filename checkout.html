@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Checkout — Atelier</title>
-  <meta name="description" content="Atelier checkout.">
+  <title>Checkout — E-CV Store</title>
+  <meta name="description" content="E-CV Store checkout.">
   <meta name="robots" content="noindex">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@500;600;700;800&family=Geist:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="assets/css/base.css">
   <link rel="stylesheet" href="assets/css/store.css">
@@ -18,12 +18,12 @@
 
   <nav class="nav" aria-label="Primary">
     <div class="wrap nav__inner">
-      <a class="wordmark" href="index.html">Atelier<em>.</em></a>
+      <a class="wordmark" href="index.html">E-CV <em>Store</em></a>
       <ul class="nav__links">
-        <li><a href="shop.html">Shop</a></li>
+        <li><a href="shop.html">Templates</a></li>
         <li><a href="index.html#categories">Categories</a></li>
         <li><a href="index.html#manifesto">About</a></li>
-        <li><a href="index.html#drops">Journal</a></li>
+        <li><a href="index.html#drops">Updates</a></li>
       </ul>
       <div class="nav__actions">
         <a class="cart-btn" href="cart.html" aria-label="Cart">
@@ -116,8 +116,8 @@
   <footer class="footer">
     <div class="wrap">
       <div class="footer__base" style="border-top: 1px solid var(--hairline);">
-        <span>© 2026 Atelier. All rights reserved.</span>
-        <span>Crafted with restraint.</span>
+        <span>© 2026 E-CV Store. All rights reserved.</span>
+        <span>Designed to get you hired.</span>
       </div>
     </div>
   </footer>
@@ -135,7 +135,7 @@
           <div class="empty-state">
             <h2>Nothing to check out</h2>
             <p>Your cart is empty — add a piece or two first.</p>
-            <a class="btn btn--accent" href="shop.html">Browse the collection</a>
+            <a class="btn btn--accent" href="shop.html">Browse templates</a>
           </div>`;
         return;
       }
@@ -191,8 +191,8 @@
             </span>
             <h1>Order placed</h1>
             <p>Order <span class="order-no">${orderNo}</span> is confirmed.</p>
-            <p>Download links are on their way to <strong>${email.replace(/</g, '&lt;')}</strong>.</p>
-            <a class="btn" href="shop.html">Keep browsing</a>
+            <p>Your templates are on their way to <strong>${email.replace(/</g, '&lt;')}</strong>.</p>
+            <a class="btn btn--ghost" href="shop.html">Keep browsing</a>
           </div>`;
         window.scrollTo(0, 0);
       });

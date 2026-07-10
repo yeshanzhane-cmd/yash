@@ -1,4 +1,4 @@
-/* Atelier — store pages: shop catalog, product detail, cart, checkout.
+/* E-CV Store — store pages: shop catalog, product detail, cart, checkout.
    Requires base.css. */
 
 /* ---------- Page headers ---------- */
@@ -40,8 +40,13 @@
   cursor: pointer;
   transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
 }
-.filter-btn:hover { border-color: var(--ink); color: var(--ink); }
-.filter-btn[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+.filter-btn:hover { border-color: var(--terracotta); color: var(--terracotta); box-shadow: var(--glow); }
+.filter-btn[aria-pressed="true"] {
+  background: linear-gradient(100deg, var(--terracotta), #7DE8FF);
+  border-color: transparent;
+  color: #06060A;
+  box-shadow: var(--glow);
+}
 
 .shop-count { font-size: 14px; color: var(--stone); margin-left: auto; }
 
@@ -79,7 +84,10 @@
 
 .product__art {
   position: relative;
-  background: var(--sand);
+  background:
+    radial-gradient(120% 90% at 20% 0%, rgba(94, 234, 212, 0.10), transparent 55%),
+    radial-gradient(120% 90% at 90% 100%, rgba(167, 139, 250, 0.10), transparent 55%),
+    var(--sand-deep);
   border: 1px solid var(--hairline);
   border-radius: var(--radius);
   aspect-ratio: 4 / 3;
@@ -88,7 +96,8 @@
   justify-content: center;
   overflow: hidden;
 }
-.product__art .art-type { font-size: clamp(96px, 12vw, 180px); }
+.product__art .art-doc, .product__art .art-doc2, .product__art .art-stack,
+.product__art .art-frame { width: 40%; max-width: 240px; }
 
 .product__info .card__cat { margin-bottom: 12px; }
 .product__info h1 { font-size: clamp(34px, 4.5vw, 52px); margin-bottom: 16px; }
@@ -160,7 +169,7 @@
   color: inherit;
   width: 96px;
   height: 96px;
-  background: var(--sand);
+  background: var(--sand-deep);
   border: 1px solid var(--hairline);
   border-radius: 8px;
   display: flex;
@@ -168,14 +177,22 @@
   justify-content: center;
   overflow: hidden;
 }
-.cart-line__art .art-type { font-size: 34px; }
-.cart-line__art .art-type small { display: none; }
-.cart-line__art .art-ui { width: 70%; gap: 5px; }
-.cart-line__art .art-ui i { height: 7px; }
-.cart-line__art .art-ui i:nth-child(1) { height: 16px; }
-.cart-line__art .art-ui i:nth-child(4) { height: 12px; }
-.cart-line__art .art-grid { gap: 5px; width: 70%; }
-.cart-line__art .art-frame { font-size: 12px; box-shadow: 6px 6px 0 var(--sand-deep); }
+.cart-line__art .art-doc, .cart-line__art .art-doc2, .cart-line__art .art-stack {
+  width: 56%;
+  padding: 6px;
+  gap: 3px;
+  border-radius: 4px;
+}
+.cart-line__art .art-doc .hd, .cart-line__art .art-doc2 .hd { height: 8px; margin-bottom: 1px; }
+.cart-line__art .art-doc i, .cart-line__art .art-doc2 i { height: 3px; }
+.cart-line__art .art-doc2 .col { gap: 3px; }
+.cart-line__art .art-stack { padding: 0; }
+.cart-line__art .art-stack b { border-radius: 4px; }
+.cart-line__art .art-stack b:nth-child(3) { padding: 6px; gap: 3px; }
+.cart-line__art .art-stack b:nth-child(3)::before { height: 8px; }
+.cart-line__art .art-frame { width: 56%; font-size: 10px; box-shadow: 4px 4px 0 rgba(94, 234, 212, 0.25); }
+.cart-line__art .art-grid { gap: 4px; width: 68%; }
+.cart-line__art .art-grid i { border-radius: 3px; }
 
 .cart-line__meta a { font-family: var(--font-display); font-size: 20px; color: var(--ink); text-decoration: none; }
 .cart-line__meta a:hover { color: var(--terracotta); }
@@ -198,7 +215,7 @@
 
 /* ---------- Order summary ---------- */
 .summary {
-  background: var(--sand);
+  background: linear-gradient(160deg, var(--sand), #101016);
   border: 1px solid var(--hairline);
   border-radius: var(--radius);
   padding: 32px;
@@ -207,8 +224,8 @@
 .summary dl { display: grid; grid-template-columns: 1fr auto; gap: 12px 16px; font-size: 15px; }
 .summary dt { color: var(--stone); }
 .summary dd { text-align: right; font-weight: 600; font-variant-numeric: tabular-nums; }
-.summary .total { font-family: var(--font-display); font-size: 22px; padding-top: 16px; margin-top: 8px; border-top: 1px solid var(--sand-deep); }
-.summary .total + dd { font-size: 22px; padding-top: 16px; margin-top: 8px; border-top: 1px solid var(--sand-deep); font-family: var(--font-display); }
+.summary .total { font-family: var(--font-display); font-size: 22px; padding-top: 16px; margin-top: 8px; border-top: 1px solid var(--hairline); }
+.summary .total + dd { font-size: 22px; padding-top: 16px; margin-top: 8px; border-top: 1px solid var(--hairline); font-family: var(--font-display); color: var(--terracotta); }
 .summary .btn { width: 100%; margin-top: 24px; }
 .summary .fine { font-size: 13px; color: var(--stone); margin-top: 16px; text-align: center; }
 
@@ -232,7 +249,7 @@
   align-items: flex-start;
   padding: 16px 20px;
   background: var(--sand);
-  border: 1px solid var(--hairline);
+  border: 1px solid rgba(167, 139, 250, 0.4);
   border-radius: 8px;
   font-size: 14px;
   color: var(--stone);
@@ -245,7 +262,7 @@
   justify-content: space-between;
   gap: 16px;
   padding: 12px 0;
-  border-bottom: 1px solid var(--sand-deep);
+  border-bottom: 1px solid var(--hairline);
   font-size: 15px;
 }
 .mini-lines .qty-tag { color: var(--stone); font-size: 13px; }
@@ -264,9 +281,10 @@
   width: 72px;
   height: 72px;
   border-radius: 50%;
-  background: var(--ink);
-  color: var(--paper);
+  background: linear-gradient(135deg, var(--terracotta), var(--violet));
+  color: #06060A;
   margin-bottom: 32px;
+  box-shadow: var(--glow-strong);
 }
 .success-panel h1 { font-size: clamp(34px, 5vw, 48px); margin-bottom: 16px; }
 .success-panel p { color: var(--stone); margin-bottom: 8px; }
