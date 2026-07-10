@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cart — Atelier</title>
+  <meta name="description" content="Your Atelier cart.">
+  <meta name="robots" content="noindex">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="assets/css/base.css">
+  <link rel="stylesheet" href="assets/css/store.css">
+</head>
+<body>
+
+  <nav class="nav" aria-label="Primary">
+    <div class="wrap nav__inner">
+      <a class="wordmark" href="index.html">Atelier<em>.</em></a>
+      <ul class="nav__links">
+        <li><a href="shop.html">Shop</a></li>
+        <li><a href="index.html#categories">Categories</a></li>
+        <li><a href="index.html#manifesto">About</a></li>
+        <li><a href="index.html#drops">Journal</a></li>
+      </ul>
+      <div class="nav__actions">
+        <a class="cart-btn" href="cart.html" aria-label="Cart">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
+          <span class="badge" id="cart-badge" hidden>0</span>
+        </a>
+        <a class="btn nav__shop" href="shop.html">Shop</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="cart-page">
+    <div class="wrap">
+      <header class="page-head" style="padding: 0 0 48px;">
+        <span class="eyebrow">Your selection</span>
+        <h1>Cart</h1>
+      </header>
+      <div id="cart-root"></div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap">
+      <div class="footer__base" style="border-top: 1px solid var(--hairline);">
+        <span>© 2026 Atelier. All rights reserved.</span>
+        <span>Crafted with restraint.</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="assets/js/products.js" defer></script>
+  <script src="assets/js/cart.js" defer></script>
+  <script src="assets/js/ui.js" defer></script>
+  <script defer>
+    document.addEventListener('DOMContentLoaded', () => {
+      const root = document.getElementById('cart-root');
+
+      function render() {
+        const lines = Cart.lines();
+
+        if (lines.length === 0) {
+          root.innerHTML = `
+            <div class="empty-state">
+              <h2>Your cart is empty</h2>
+              <p>The collection is small on purpose — it won't take long to browse.</p>
+              <a class="btn btn--accent" href="shop.html">Browse the collection</a>
+            </div>`;
+          return;
+        }
+
+        const subtotal = Cart.subtotal();
+        root.innerHTML = `
+          <div class="cart-layout">
+            <ul class="cart-lines">
+              ${lines.map(({ product, qty, total }) => `
+                <li class="cart-line" data-id="${product.id}">
+                  <a class="cart-line__art" href="product.html?id=${product.id}" aria-hidden="true" tabindex="-1">
+                    ${artHTML(product.art)}
+                  </a>
+                  <div class="cart-line__meta">
+                    <a href="product.html?id=${product.id}">${product.name}</a>
+                    <span class="card__cat">${product.category} · ${money.format(product.price)} each</span>
+                    <div class="cart-line__controls">
+                      <div class="qty" aria-label="Quantity for ${product.name}">
+                        <button type="button" data-action="dec" aria-label="Decrease quantity of ${product.name}">−</button>
+                        <output aria-live="polite">${qty}</output>
+                        <button type="button" data-action="inc" aria-label="Increase quantity of ${product.name}">+</button>
+                      </div>
+                      <button type="button" class="remove-btn" data-action="remove">Remove</button>
+                    </div>
+                  </div>
+                  <span class="cart-line__price">${money.format(total)}</span>
+                </li>`).join('')}
+            </ul>
+            <aside class="summary" aria-label="Order summary">
+              <h2>Summary</h2>
+              <dl>
+                <dt>Subtotal</dt><dd>${money.format(subtotal)}</dd>
+                <dt>Delivery</dt><dd>Instant download</dd>
+                <dt class="total">Total</dt><dd>${money.format(subtotal)}</dd>
+              </dl>
+              <a class="btn btn--accent" href="checkout.html">Proceed to checkout</a>
+              <p class="fine">Licenses are delivered by email the moment your order completes.</p>
+            </aside>
+          </div>`;
+      }
+
+      root.addEventListener('click', (e) => {
+        const btn = e.target.closest('button[data-action]');
+        if (!btn) return;
+        const id = btn.closest('.cart-line').dataset.id;
+        const current = Cart.read()[id] || 0;
+        if (btn.dataset.action === 'inc') Cart.setQty(id, current + 1);
+        if (btn.dataset.action === 'dec') Cart.setQty(id, current - 1);
+        if (btn.dataset.action === 'remove') Cart.remove(id);
+        render();
+      });
+
+      render();
+    });
+  </script>
+</body>
+</html>
