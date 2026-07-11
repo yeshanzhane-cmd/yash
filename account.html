@@ -22,6 +22,7 @@
       <a class="wordmark" href="index.html">E-CV <em>Store</em></a>
       <ul class="nav__links">
         <li><a href="shop.html">Templates</a></li>
+        <li><a href="builder.html">CV Builder</a></li>
         <li><a href="about.html">About</a></li>
         <li><a href="support.html">Support</a></li>
         <li><a href="account.html" aria-current="page">Account</a></li>
@@ -109,7 +110,10 @@
               <h2 style="font-size: 26px; margin-bottom: 4px;">Welcome back, ${user.name.split(' ')[0]}</h2>
               <p style="color: var(--stone); font-size: 15px;">${user.email}</p>
             </div>
-            <button class="btn btn--ghost" id="signout-btn" type="button">Sign out</button>
+            <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+              <a class="btn btn--accent" href="builder.html">Open CV Builder</a>
+              <button class="btn btn--ghost" id="signout-btn" type="button">Sign out</button>
+            </div>
           </div>
           <h2 style="font-size: 22px; margin-bottom: 20px;">Order history</h2>
           ${ordersHTML()}`;

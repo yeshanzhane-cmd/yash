@@ -19,22 +19,27 @@ step, no dependencies.
 | `support.html` | Help center — FAQ accordion, licensing, refunds, contact form |
 | `account.html` | Demo sign-in/sign-up (localStorage) with order history |
 | `404.html` | Not-found page (wire up via your static host's 404 setting) |
+| `login.html` | Cinematic sign-in — switch on the desk lamp to reveal the panel |
+| `builder.html` | CV builder — enter details once, render across 4 template designs + 5 accent colors, export PDF |
 
 ## Structure
 
 ```
 index.html / shop.html / product.html / cart.html / checkout.html
-about.html / support.html / account.html / 404.html
+about.html / support.html / account.html / 404.html / login.html / builder.html
 assets/
   css/
     base.css      # dark design tokens, primitives, nav, 3D cards, quick-view dialog, forms, footer
     landing.css   # landing sections: hero stage, marquee, steps, categories
     store.css     # shop, product, cart, checkout
     pages.css     # about, support/FAQ, account, 404
+    login.css     # lamp-scene sign-in
+    builder.css   # builder workspace + the four CV template designs + print/PDF
   js/
     products.js   # template catalog — single source of truth
     cart.js       # cart state (localStorage) + badge updates
     ui.js         # money formatting, CSS template art, tilt, parallax, quick-view, reveals
+    builder.js    # CV data model (ecv-cv), four template renderers, escaping
 ```
 
 ## How it works
@@ -50,6 +55,11 @@ assets/
   IntersectionObserver scroll reveals. All motion respects
   `prefers-reduced-motion`, tilt/parallax only run on hover-capable devices,
   and content stays visible if JavaScript fails.
+- **CV Builder**: one data model rendered through four genuinely different
+  layouts (Apex single-column ATS, Studio dark sidebar with photo, Executive
+  centered letterhead, Terminal technical mono). Accent color flows through
+  `--cv-accent`; "Download PDF" uses a print stylesheet sized to A4. The
+  builder requires sign-in (login.html) and autosaves per browser.
 - **Checkout is a demo.** No payment is processed and no card data leaves the
   page. To take real orders, replace the submit handler in `checkout.html`
   with a payment provider integration (e.g. Stripe Checkout).

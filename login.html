@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign in — E-CV Store</title>
+  <meta name="description" content="Sign in to E-CV Store to build your CV.">
+  <meta name="robots" content="noindex">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@500;600;700;800&family=Geist:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="assets/css/base.css">
+  <link rel="stylesheet" href="assets/css/login.css">
+</head>
+<body>
+
+  <nav class="nav" aria-label="Primary">
+    <div class="wrap nav__inner">
+      <a class="wordmark" href="index.html">E-CV <em>Store</em></a>
+      <ul class="nav__links">
+        <li><a href="shop.html">Templates</a></li>
+        <li><a href="builder.html">CV Builder</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="support.html">Support</a></li>
+      </ul>
+      <div class="nav__actions">
+        <a class="cart-btn" href="cart.html" aria-label="Cart">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
+          <span class="badge" id="cart-badge" hidden>0</span>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    <div class="scene" id="scene">
+      <a class="skip-link" href="#login-panel" id="skip-link">Skip the scene — sign in directly</a>
+
+      <div class="desk-side">
+        <div class="lamp-rig" aria-hidden="false">
+          <div class="light-cone" aria-hidden="true"></div>
+          <div class="desk" aria-hidden="true"></div>
+          <div class="notebook" aria-hidden="true"></div>
+          <button class="lamp" id="lamp" type="button" aria-pressed="false" aria-label="Switch on the desk lamp to reveal the sign-in panel">
+            <span class="base" aria-hidden="true"></span>
+            <span class="stem" aria-hidden="true"></span>
+            <span class="arm" aria-hidden="true"></span>
+            <span class="shade" aria-hidden="true"></span>
+            <span class="bulb" aria-hidden="true"></span>
+            <span class="cord" aria-hidden="true"></span>
+          </button>
+          <span class="lamp-hint" id="lamp-hint" aria-hidden="true">Pull the cord ↴</span>
+        </div>
+      </div>
+
+      <div class="login-side">
+        <section class="login-panel" id="login-panel" aria-label="Sign in">
+          <span class="eyebrow">Welcome back to the desk</span>
+          <h1>Sign in</h1>
+          <p>Your CV, your templates and your orders — right where you left them.</p>
+
+          <button class="google-btn" id="google-btn" type="button">
+            <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path fill="#4285F4" d="M23.5 12.3c0-.9-.1-1.7-.2-2.5H12v4.7h6.5a5.6 5.6 0 0 1-2.5 3.7v3h4a12 12 0 0 0 3.5-8.9z"/><path fill="#34A853" d="M12 24c3.2 0 6-1 8-2.9l-4-3a7.4 7.4 0 0 1-11-3.9h-4v3.1A12 12 0 0 0 12 24z"/><path fill="#FBBC05" d="M5 14.2a7.2 7.2 0 0 1 0-4.5v-3H1a12 12 0 0 0 0 10.6l4-3.1z"/><path fill="#EA4335" d="M12 4.7c1.8 0 3.4.6 4.6 1.8L20.2 3A12 12 0 0 0 1 6.6l4 3.1A7.4 7.4 0 0 1 12 4.7z"/></svg>
+            Continue with Google
+          </button>
+          <p class="form-msg" id="google-msg" role="status" aria-live="polite"></p>
+
+          <div class="or-rule">or with email</div>
+
+          <form id="login-form" novalidate>
+            <div class="field">
+              <label for="li-name">Full name</label>
+              <input class="input" type="text" id="li-name" autocomplete="name" required>
+              <span class="field-error" aria-live="polite"></span>
+            </div>
+            <div class="field">
+              <label for="li-email">Email address</label>
+              <input class="input" type="email" id="li-email" autocomplete="email" placeholder="you@example.com" required>
+              <span class="field-error" aria-live="polite"></span>
+            </div>
+            <button class="btn btn--accent" type="submit">Sign in &amp; open the builder</button>
+            <p style="font-size: 13px; color: var(--stone); text-align: center;">Demo sign-in — stored only in this browser, no password, no server.</p>
+          </form>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <script src="assets/js/products.js" defer></script>
+  <script src="assets/js/cart.js" defer></script>
+  <script src="assets/js/ui.js" defer></script>
+  <script defer>
+    document.addEventListener('DOMContentLoaded', () => {
+      const scene = document.getElementById('scene');
+      const lamp = document.getElementById('lamp');
+      const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      function lightUp() {
+        scene.classList.add('lit');
+        lamp.setAttribute('aria-pressed', 'true');
+        setTimeout(() => document.getElementById('li-name').focus({ preventScroll: true }), reduce ? 0 : 900);
+      }
+
+      lamp.addEventListener('click', lightUp);
+      document.getElementById('skip-link').addEventListener('click', lightUp);
+      // Reduced motion (or a returning user) shouldn't sit in a dark room.
+      if (reduce) lightUp();
+      const existing = (() => { try { return JSON.parse(localStorage.getItem('ecv-user')); } catch { return null; } })();
+      if (existing && existing.email) lightUp();
+
+      const next = new URLSearchParams(location.search).get('next') || 'builder.html';
+      const safeNext = /^[\w-]+\.html$/.test(next) ? next : 'builder.html';
+
+      function signIn(name, email) {
+        localStorage.setItem('ecv-user', JSON.stringify({ name, email }));
+        location.href = safeNext;
+      }
+
+      document.getElementById('google-btn').addEventListener('click', () => {
+        const msg = document.getElementById('google-msg');
+        msg.textContent = 'Google sign-in needs an OAuth client configured — using demo mode: enter your Gmail below.';
+        msg.className = 'form-msg';
+        const email = document.getElementById('li-email');
+        email.placeholder = 'you@gmail.com';
+        email.focus();
+      });
+
+      const form = document.getElementById('login-form');
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const nameInput = document.getElementById('li-name');
+        const emailInput = document.getElementById('li-email');
+        const setErr = (input, text) => {
+          input.classList.toggle('has-error', !!text);
+          input.parentElement.querySelector('.field-error').textContent = text || '';
+          if (text) input.focus();
+        };
+        setErr(nameInput); setErr(emailInput);
+        if (!nameInput.value.trim()) { setErr(nameInput, 'Enter your name.'); return; }
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput.value.trim())) { setErr(emailInput, 'Enter a valid email address.'); return; }
+        signIn(nameInput.value.trim(), emailInput.value.trim());
+      });
+
+      form.querySelectorAll('.input').forEach((input) => {
+        input.addEventListener('input', () => {
+          input.classList.remove('has-error');
+          input.parentElement.querySelector('.field-error').textContent = '';
+        });
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CV Builder — E-CV Store</title>
+  <meta name="description" content="Build your CV in the browser: enter your details once and switch instantly between four distinct template designs and five color themes. Export to PDF.">
+  <meta name="robots" content="noindex">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@500;600;700;800&family=Geist:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="assets/css/base.css">
+  <link rel="stylesheet" href="assets/css/store.css">
+  <link rel="stylesheet" href="assets/css/builder.css">
+</head>
+<body>
+
+  <nav class="nav" aria-label="Primary">
+    <div class="wrap nav__inner">
+      <a class="wordmark" href="index.html">E-CV <em>Store</em></a>
+      <ul class="nav__links">
+        <li><a href="shop.html">Templates</a></li>
+        <li><a href="builder.html" aria-current="page">CV Builder</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="account.html">Account</a></li>
+      </ul>
+      <div class="nav__actions">
+        <a class="cart-btn" href="account.html" aria-label="Account">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </a>
+        <a class="cart-btn" href="cart.html" aria-label="Cart">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
+          <span class="badge" id="cart-badge" hidden>0</span>
+        </a>
+        <button class="btn btn--accent nav__shop" id="pdf-btn" type="button">Download PDF</button>
+      </div>
+    </div>
+  </nav>
+
+  <main class="builder-page">
+    <div class="wrap">
+      <header class="page-head builder-head" style="padding-bottom: 40px;">
+        <span class="eyebrow">CV Builder</span>
+        <h1>Type once. <span class="grad-text">Try every design.</span></h1>
+        <p>Your details render live into four distinct layouts — switch templates and colors until it feels like you, then download the PDF.</p>
+      </header>
+
+      <div class="controls" role="group" aria-label="Design controls">
+        <div class="group" id="tpl-group" role="group" aria-label="Template">
+          <span>Template</span>
+        </div>
+        <div class="group" id="color-group" role="group" aria-label="Accent color">
+          <span>Color</span>
+        </div>
+        <div class="group spacer">
+          <button class="btn btn--ghost" id="reset-btn" type="button" style="padding: 10px 20px; font-size: 14px;">Reset to sample</button>
+        </div>
+      </div>
+
+      <div class="workspace">
+        <section class="editor" aria-label="Your details">
+          <form id="cv-form">
+            <h2>You</h2>
+            <div class="photo-drop">
+              <span id="photo-preview" class="ph">photo</span>
+              <div class="field" style="flex:1">
+                <label for="f-photo">Photo (used by the Studio template)</label>
+                <input class="input" type="file" id="f-photo" accept="image/*">
+              </div>
+            </div>
+            <div class="row2">
+              <div class="field"><label for="f-name">Full name</label><input class="input" type="text" id="f-name" data-key="name"></div>
+              <div class="field"><label for="f-title">Job title</label><input class="input" type="text" id="f-title" data-key="title"></div>
+            </div>
+            <div class="row2">
+              <div class="field"><label for="f-email">Email</label><input class="input" type="email" id="f-email" data-key="email"></div>
+              <div class="field"><label for="f-phone">Phone</label><input class="input" type="text" id="f-phone" data-key="phone"></div>
+            </div>
+            <div class="row2">
+              <div class="field"><label for="f-location">Location</label><input class="input" type="text" id="f-location" data-key="location"></div>
+              <div class="field"><label for="f-website">Website</label><input class="input" type="text" id="f-website" data-key="website"></div>
+            </div>
+            <div class="field"><label for="f-summary">Profile summary</label><textarea class="input" id="f-summary" data-key="summary"></textarea></div>
+
+            <h2>Experience</h2>
+            <div id="exp-list"></div>
+            <button class="btn btn--ghost add-entry" type="button" id="add-exp">+ Add role</button>
+
+            <h2>Education</h2>
+            <div id="edu-list"></div>
+            <button class="btn btn--ghost add-entry" type="button" id="add-edu">+ Add education</button>
+
+            <h2>Skills</h2>
+            <div class="field">
+              <label for="f-skills">Comma-separated</label>
+              <input class="input" type="text" id="f-skills" placeholder="Figma, Prototyping, HTML/CSS">
+            </div>
+          </form>
+        </section>
+
+        <section class="preview-area" aria-label="Live preview">
+          <div class="preview-well print-root">
+            <div class="cv-page" id="cv-mount" aria-live="polite"></div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap">
+      <div class="footer__base" style="border-top: 1px solid var(--hairline);">
+        <span>© 2026 E-CV Store. All rights reserved.</span>
+        <span>Designed to get you hired.</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="assets/js/products.js" defer></script>
+  <script src="assets/js/cart.js" defer></script>
+  <script src="assets/js/ui.js" defer></script>
+  <script src="assets/js/builder.js" defer></script>
+  <script defer>
+    document.addEventListener('DOMContentLoaded', () => {
+      // The builder is a signed-in feature: profiles keep the CV per browser.
+      const user = (() => { try { return JSON.parse(localStorage.getItem('ecv-user')); } catch { return null; } })();
+      if (!user || !user.email) { location.replace('login.html?next=builder.html'); return; }
+
+      const cv = cvLoad();
+      const mount = document.getElementById('cv-mount');
+      const form = document.getElementById('cv-form');
+
+      let saveTimer;
+      function update() {
+        renderCV(cv, mount);
+        clearTimeout(saveTimer);
+        saveTimer = setTimeout(() => cvSave(cv), 300);
+      }
+
+      /* ----- template + color controls ----- */
+      const tplGroup = document.getElementById('tpl-group');
+      CV_TEMPLATES.forEach((t) => {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'tpl-btn';
+        b.textContent = t.name;
+        b.dataset.tpl = t.id;
+        b.setAttribute('aria-pressed', String(cv.template === t.id));
+        b.addEventListener('click', () => {
+          cv.template = t.id;
+          tplGroup.querySelectorAll('.tpl-btn').forEach((x) => x.setAttribute('aria-pressed', String(x.dataset.tpl === t.id)));
+          update();
+        });
+        tplGroup.appendChild(b);
+      });
+
+      const colorGroup = document.getElementById('color-group');
+      CV_COLORS.forEach((c) => {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'swatch';
+        b.style.background = c.hex;
+        b.style.setProperty('--sw', c.hex);
+        b.dataset.hex = c.hex;
+        b.setAttribute('aria-label', `Accent color ${c.id}`);
+        b.setAttribute('aria-pressed', String(cv.accent === c.hex));
+        b.addEventListener('click', () => {
+          cv.accent = c.hex;
+          colorGroup.querySelectorAll('.swatch').forEach((x) => x.setAttribute('aria-pressed', String(x.dataset.hex === c.hex)));
+          update();
+        });
+        colorGroup.appendChild(b);
+      });
+
+      /* ----- simple fields ----- */
+      form.querySelectorAll('[data-key]').forEach((input) => {
+        input.value = cv[input.dataset.key] || '';
+        input.addEventListener('input', () => { cv[input.dataset.key] = input.value; update(); });
+      });
+
+      const skillsInput = document.getElementById('f-skills');
+      skillsInput.value = cv.skills.join(', ');
+      skillsInput.addEventListener('input', () => {
+        cv.skills = skillsInput.value.split(',').map((s) => s.trim()).filter(Boolean);
+        update();
+      });
+
+      /* ----- photo upload ----- */
+      const photoPreview = document.getElementById('photo-preview');
+      function showPhoto() {
+        if (cv.photo) {
+          const img = document.createElement('img');
+          img.src = cv.photo;
+          img.alt = 'Your photo';
+          photoPreview.replaceWith(img);
+          img.id = 'photo-preview';
+        }
+      }
+      showPhoto();
+      document.getElementById('f-photo').addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        if (file.size > 2 * 1024 * 1024) { alert('Please choose an image under 2 MB.'); return; }
+        const reader = new FileReader();
+        reader.onload = () => { cv.photo = reader.result; showPhoto(); update(); };
+        reader.readAsDataURL(file);
+      });
+
+      /* ----- repeatable entries ----- */
+      function entryRow(kind, item, index) {
+        const isExp = kind === 'exp';
+        const wrap = document.createElement('div');
+        wrap.className = 'entry';
+        wrap.innerHTML = `
+          <button class="remove-btn" type="button" aria-label="Remove entry">Remove</button>
+          <div class="row2">
+            <div class="field"><label>${isExp ? 'Role' : 'Degree'}</label><input class="input" type="text" data-f="${isExp ? 'role' : 'degree'}"></div>
+            <div class="field"><label>${isExp ? 'Company' : 'School'}</label><input class="input" type="text" data-f="${isExp ? 'company' : 'school'}"></div>
+          </div>
+          <div class="field"><label>Dates</label><input class="input" type="text" data-f="dates" placeholder="2022 — Present"></div>
+          ${isExp ? '<div class="field"><label>What you achieved</label><textarea class="input" data-f="desc"></textarea></div>' : ''}`;
+        wrap.querySelectorAll('[data-f]').forEach((input) => {
+          input.value = item[input.dataset.f] || '';
+          input.addEventListener('input', () => { item[input.dataset.f] = input.value; update(); });
+        });
+        wrap.querySelector('.remove-btn').addEventListener('click', () => {
+          (isExp ? cv.experience : cv.education).splice(index, 1);
+          renderEntries(); update();
+        });
+        return wrap;
+      }
+
+      function renderEntries() {
+        const expList = document.getElementById('exp-list');
+        const eduList = document.getElementById('edu-list');
+        expList.replaceChildren(...cv.experience.map((it, i) => entryRow('exp', it, i)));
+        eduList.replaceChildren(...cv.education.map((it, i) => entryRow('edu', it, i)));
+      }
+      renderEntries();
+
+      document.getElementById('add-exp').addEventListener('click', () => {
+        cv.experience.push({ role: '', company: '', dates: '', desc: '' });
+        renderEntries(); update();
+      });
+      document.getElementById('add-edu').addEventListener('click', () => {
+        cv.education.push({ degree: '', school: '', dates: '' });
+        renderEntries(); update();
+      });
+
+      /* ----- actions ----- */
+      document.getElementById('pdf-btn').addEventListener('click', () => window.print());
+      document.getElementById('reset-btn').addEventListener('click', () => {
+        if (!confirm('Replace your current CV with the sample data?')) return;
+        Object.assign(cv, JSON.parse(JSON.stringify(CV_SAMPLE)));
+        form.querySelectorAll('[data-key]').forEach((input) => { input.value = cv[input.dataset.key] || ''; });
+        skillsInput.value = cv.skills.join(', ');
+        renderEntries(); update();
+      });
+
+      update();
+    });
+  </script>
+</body>
+</html>

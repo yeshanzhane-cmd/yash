@@ -1,0 +1,270 @@
+/* E-CV Store — cinematic login: a dark study, a desk lamp on the left.
+   Pulling the lamp cord lights the room and reveals the sign-in panel
+   on the right. Requires base.css. */
+
+.scene {
+  position: relative;
+  min-height: calc(100vh - 72px);
+  overflow: hidden;
+  background: #050507;
+  display: grid;
+  grid-template-columns: 1fr;
+  align-items: center;
+}
+@media (min-width: 900px) { .scene { grid-template-columns: 5fr 7fr; } }
+
+/* ---------- The desk (left) ---------- */
+.desk-side {
+  position: relative;
+  height: 46vh;
+  min-height: 360px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+@media (min-width: 900px) { .desk-side { height: 100%; min-height: 560px; } }
+
+/* Room in darkness: everything at low opacity until .lit */
+.lamp-rig { position: relative; width: 320px; height: 380px; }
+
+.desk {
+  position: absolute;
+  bottom: 48px;
+  left: -40px;
+  right: -40px;
+  height: 16px;
+  background: linear-gradient(#2A2118, #17120C);
+  border-radius: 4px 4px 0 0;
+  box-shadow: 0 22px 30px -12px rgba(0, 0, 0, 0.9);
+}
+.desk::before, .desk::after {
+  content: "";
+  position: absolute;
+  top: 16px;
+  width: 14px;
+  height: 48px;
+  background: linear-gradient(#1D1710, #0C0906);
+}
+.desk::before { left: 28px; }
+.desk::after { right: 28px; }
+
+/* A closed notebook on the desk, waiting */
+.notebook {
+  position: absolute;
+  bottom: 64px;
+  right: 30px;
+  width: 92px;
+  height: 12px;
+  background: linear-gradient(#3A3A46, #23232E);
+  border-radius: 2px;
+}
+.notebook::before {
+  content: "";
+  position: absolute;
+  inset: -6px 8px auto 8px;
+  height: 6px;
+  background: #14141B;
+  border-radius: 2px 2px 0 0;
+}
+
+/* ---------- The lamp ---------- */
+.lamp {
+  position: absolute;
+  bottom: 64px;
+  left: 44px;
+  width: 150px;
+  height: 250px;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+.lamp:focus-visible { outline: 2px solid var(--terracotta); outline-offset: 8px; border-radius: 12px; }
+
+.lamp .base {
+  position: absolute;
+  bottom: 0;
+  left: 26px;
+  width: 84px;
+  height: 12px;
+  border-radius: 50% / 60%;
+  background: linear-gradient(#3E3E4C, #1B1B24);
+}
+.lamp .stem {
+  position: absolute;
+  bottom: 10px;
+  left: 64px;
+  width: 8px;
+  height: 150px;
+  background: linear-gradient(90deg, #34343F, #1B1B24);
+  border-radius: 4px;
+}
+.lamp .arm {
+  position: absolute;
+  bottom: 150px;
+  left: 66px;
+  width: 62px;
+  height: 8px;
+  background: linear-gradient(#34343F, #1B1B24);
+  border-radius: 4px;
+  transform: rotate(-16deg);
+  transform-origin: left center;
+}
+.lamp .shade {
+  position: absolute;
+  bottom: 148px;
+  left: 108px;
+  width: 76px;
+  height: 52px;
+  background: linear-gradient(160deg, #3E3E4C, #202029);
+  clip-path: polygon(18% 0, 82% 0, 100% 100%, 0 100%);
+  border-radius: 4px;
+  transition: filter 0.4s ease;
+}
+.lamp .bulb {
+  position: absolute;
+  bottom: 142px;
+  left: 134px;
+  width: 22px;
+  height: 12px;
+  border-radius: 50%;
+  background: #26262F;
+  transition: background 0.2s ease, box-shadow 0.4s ease;
+}
+.lamp .cord {
+  position: absolute;
+  bottom: 96px;
+  left: 152px;
+  width: 2px;
+  height: 48px;
+  background: #3A3A46;
+}
+.lamp .cord::after {
+  content: "";
+  position: absolute;
+  bottom: -12px;
+  left: -5px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #4A4A58;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .scene:not(.lit) .lamp .cord { animation: sway 3s ease-in-out infinite; transform-origin: top center; }
+  @keyframes sway { 0%, 100% { transform: rotate(-4deg); } 50% { transform: rotate(4deg); } }
+}
+
+/* The cone of light — hidden until lit */
+.light-cone {
+  position: absolute;
+  bottom: 62px;
+  left: 96px;
+  width: 210px;
+  height: 152px;
+  background: linear-gradient(180deg, rgba(255, 214, 140, 0.34), rgba(255, 214, 140, 0.02));
+  clip-path: polygon(38% 0, 62% 0, 100% 100%, 0 100%);
+  opacity: 0;
+  transition: opacity 0.6s ease;
+  pointer-events: none;
+}
+
+/* Hint text floating near the cord */
+.lamp-hint {
+  position: absolute;
+  bottom: 30%;
+  left: 58%;
+  font-size: 13px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(237, 237, 244, 0.4);
+  animation: hint-pulse 2.4s ease-in-out infinite;
+  pointer-events: none;
+  white-space: nowrap;
+}
+@keyframes hint-pulse { 0%, 100% { opacity: 0.35; } 50% { opacity: 0.9; } }
+@media (prefers-reduced-motion: reduce) { .lamp-hint { animation: none; } }
+
+/* ---------- Lit state ---------- */
+.scene.lit .light-cone { opacity: 1; }
+.scene.lit .lamp .bulb { background: #FFE9B8; box-shadow: 0 0 34px 14px rgba(255, 214, 140, 0.55); }
+.scene.lit .lamp .shade { filter: brightness(1.6); }
+.scene.lit .desk { background: linear-gradient(#5A452C, #241A0F); }
+.scene.lit .notebook { background: linear-gradient(#4E4E60, #2C2C3A); }
+.scene.lit .lamp-hint { display: none; }
+.scene.lit { background: radial-gradient(60% 55% at 26% 62%, rgba(255, 202, 120, 0.10), transparent 65%), #060609; }
+
+/* ---------- Sign-in panel (right) ---------- */
+.login-side {
+  position: relative;
+  padding: 48px 24px 96px;
+  display: flex;
+  justify-content: center;
+}
+@media (min-width: 900px) { .login-side { padding: 48px; } }
+
+.login-panel {
+  width: 100%;
+  max-width: 440px;
+  background: linear-gradient(160deg, #16161F, #0E0E14);
+  border: 1px solid var(--hairline);
+  border-radius: 20px;
+  padding: 44px 36px;
+  opacity: 0;
+  transform: translateX(48px);
+  visibility: hidden;
+  transition: opacity 0.7s ease 0.35s, transform 0.7s cubic-bezier(0.2, 0.9, 0.3, 1.1) 0.35s, visibility 0s linear 1.2s;
+}
+.scene.lit .login-panel {
+  opacity: 1;
+  transform: none;
+  visibility: visible;
+  transition-delay: 0.35s, 0.35s, 0.35s;
+  box-shadow: 0 32px 80px rgba(0, 0, 0, 0.7), var(--glow);
+}
+@media (prefers-reduced-motion: reduce) {
+  .login-panel { transition: none; }
+}
+
+.login-panel .eyebrow { margin-bottom: 12px; }
+.login-panel h1 { font-size: 30px; margin-bottom: 8px; }
+.login-panel > p { color: var(--stone); font-size: 15px; margin-bottom: 28px; }
+.login-panel form { display: flex; flex-direction: column; gap: 18px; }
+
+.or-rule {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  color: var(--stone);
+  font-size: 13px;
+  margin: 22px 0;
+}
+.or-rule::before, .or-rule::after { content: ""; flex: 1; border-top: 1px solid var(--hairline); }
+
+.google-btn {
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 14px 24px;
+  background: var(--ink);
+  color: #0C0C10;
+  font-size: 15px;
+  font-weight: 600;
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.google-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(237, 237, 244, 0.22); }
+
+.skip-link {
+  position: absolute;
+  top: 16px;
+  right: 24px;
+  font-size: 13px;
+  color: var(--stone);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.skip-link:hover { color: var(--terracotta); }
