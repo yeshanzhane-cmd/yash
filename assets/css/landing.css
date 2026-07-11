@@ -11,28 +11,16 @@
     radial-gradient(50% 40% at 15% 0%, rgba(24, 170, 210, 0.10), transparent 70%),
     radial-gradient(50% 40% at 90% 15%, rgba(77, 124, 254, 0.10), transparent 70%);
 }
-.bg-fx::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background-image:
-    linear-gradient(rgba(24, 170, 210, 0.07) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(24, 170, 210, 0.07) 1px, transparent 1px);
-  background-size: 56px 56px;
-  mask-image: radial-gradient(70% 50% at 50% 0%, #000 0%, transparent 100%);
-  -webkit-mask-image: radial-gradient(70% 50% at 50% 0%, #000 0%, transparent 100%);
-}
+.bg-fx::after { content: none; }
 
 /* ---------- Hero ---------- */
 .hero { padding: 88px 0 112px; overflow: hidden; }
 .hero__copy {
-  background: rgba(255, 255, 255, 0.66);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.85);
+  background: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
   border-radius: 24px;
-  padding: 40px 36px;
-  box-shadow: 0 24px 56px rgba(14, 90, 116, 0.16);
+  padding: 32px 32px;
 }
 @media (min-width: 1024px) { .hero { padding: 128px 0 152px; } }
 
