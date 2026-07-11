@@ -55,11 +55,17 @@ assets/
   IntersectionObserver scroll reveals. All motion respects
   `prefers-reduced-motion`, tilt/parallax only run on hover-capable devices,
   and content stays visible if JavaScript fails.
-- **CV Builder**: one data model rendered through four genuinely different
-  layouts (Apex single-column ATS, Studio dark sidebar with photo, Executive
-  centered letterhead, Terminal technical mono). Accent color flows through
-  `--cv-accent`; "Download PDF" uses a print stylesheet sized to A4. The
-  builder requires sign-in (login.html) and autosaves per browser.
+- **CV Builder**: one data model rendered through eight designs — four CV
+  layouts (Apex single-column ATS, Studio dark sidebar, Executive letterhead,
+  Terminal mono) and four portfolio themes modeled on the studio's original
+  artwork (Brand numbered "PORTFOLIO." page, Spotlight light role card, Neon
+  dark role card, Editorial cream serif). Six role presets (Software
+  Engineer, Graphic Designer, Content Creator, Digital Marketer, Web
+  Developer, UX/UI Designer) preload editable starter content with a matching
+  theme. Each account gets a deterministic "signature look" (template +
+  accent + photo shape derived from the email) so every user starts unique.
+  Accent flows through `--cv-accent`; "Download PDF" uses an A4 print
+  stylesheet. Requires sign-in (login.html) and autosaves per browser.
 - **Checkout is a demo.** No payment is processed and no card data leaves the
   page. To take real orders, replace the submit handler in `checkout.html`
   with a payment provider integration (e.g. Stripe Checkout).

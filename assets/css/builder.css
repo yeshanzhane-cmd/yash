@@ -270,3 +270,222 @@
   }
   .cv--term { font-size: 11.5px; }
 }
+
+/* ==================================================================
+   Portfolio themes — modeled on the E_CV studio artwork:
+   brand (numbered PORTFOLIO. page), spotlight (light role card),
+   neon (dark role card), editorial (cream serif portfolio).
+   ================================================================== */
+
+/* ---------- Shared portfolio fragments ---------- */
+.pf-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 0.8em;
+}
+.pf-mark { font-weight: 800; letter-spacing: 0.04em; font-size: 1.1em; }
+.pf-mark i { font-style: normal; color: var(--cv-accent); }
+.pf-pageno { font-size: 0.85em; color: var(--cv-mut); text-align: right; }
+.pf-pageno b { font-size: 1.9em; font-weight: 800; color: var(--cv-accent); display: block; line-height: 1; }
+
+.pf-display {
+  font-size: 3.1em;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  line-height: 1;
+}
+.pf-display span { color: var(--cv-accent); }
+
+.pf-strip {
+  font-size: 0.72em;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--cv-mut);
+  border-top: 2px solid var(--cv-ink);
+  padding-top: 0.9em;
+  margin-top: 1em;
+}
+
+.pf-cols {
+  display: grid;
+  grid-template-columns: 7fr 5fr;
+  gap: 2em;
+  align-items: start;
+  margin-top: 1.6em;
+}
+
+.pf-photo {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  border-radius: var(--cv-blob, 58% 42% 55% 45% / 55% 48% 42% 52%);
+  background: color-mix(in srgb, var(--cv-accent) 22%, #FFFFFF);
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.18);
+}
+.pf-photo--ph {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 4em;
+  font-weight: 800;
+  color: var(--cv-accent);
+}
+
+.pf-hello { font-size: 2em; font-weight: 800; }
+.pf-hello span { color: var(--cv-accent); }
+.pf-im { font-size: 1.15em; font-weight: 700; color: var(--cv-accent); letter-spacing: 0.08em; text-transform: uppercase; margin-top: 0.2em; }
+.pf-sum { margin-top: 0.9em; font-size: 0.95em; color: var(--cv-mut); }
+.pf-script { font-family: var(--font-display); font-style: italic; font-weight: 600; font-size: 1.25em; margin-top: 1em; }
+
+.pf-foot {
+  margin-top: 2em;
+  padding-top: 0.9em;
+  border-top: 1px solid var(--cv-line);
+  font-size: 0.85em;
+  color: var(--cv-mut);
+}
+
+.pf-quote { font-size: 3.2em; font-weight: 800; line-height: 0.6; color: var(--cv-accent); }
+
+.pf-role {
+  font-size: 2.5em;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  line-height: 1.02;
+  margin-bottom: 0.4em;
+}
+.pf-role span { color: var(--cv-accent); }
+
+/* Skill bars */
+.cv-bars li { display: grid; grid-template-columns: 5.5em 1fr; align-items: center; gap: 0.8em; margin-bottom: 0.55em; font-size: 0.85em; }
+.cv-bars li span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cv-bars li i {
+  display: block;
+  height: 0.45em;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--cv-accent) var(--w, 80%), var(--cv-line) var(--w, 80%));
+}
+
+/* ---------- Brand ---------- */
+.cv--brand { padding: 2.6em 2.8em; --cv-accent: #6C5CE7; }
+.cv--brand .pf-contact, .cv--brand .cv-contact { margin-top: 1.2em; font-size: 0.8em; color: var(--cv-mut); display: flex; flex-wrap: wrap; gap: 0.3em 1.2em; }
+.cv--brand .cv-sec > h2 {
+  font-size: 1em;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 0.6em;
+}
+.cv--brand .cv-sec > h2::after { content: "."; color: var(--cv-accent); }
+.cv--brand .pf-services ul { display: grid; grid-template-columns: 1fr 1fr; gap: 0.7em 1.4em; list-style: none; }
+.cv--brand .pf-services li { display: flex; align-items: center; gap: 0.7em; font-size: 0.9em; font-weight: 600; }
+.cv--brand .pf-services li i {
+  width: 1.7em;
+  height: 1.7em;
+  flex: none;
+  border-radius: 0.5em;
+  background: color-mix(in srgb, var(--cv-accent) 14%, #FFFFFF);
+  border: 1px solid color-mix(in srgb, var(--cv-accent) 40%, #FFFFFF);
+  position: relative;
+}
+.cv--brand .pf-services li i::after {
+  content: "";
+  position: absolute;
+  inset: 30%;
+  border-radius: 50%;
+  background: var(--cv-accent);
+}
+.cv--brand .cv-item { border-left: 3px solid color-mix(in srgb, var(--cv-accent) 45%, #FFFFFF); padding-left: 1em; }
+
+/* ---------- Spotlight ---------- */
+.cv--spotlight {
+  padding: 2.6em 2.8em;
+  background:
+    radial-gradient(70% 45% at 88% 12%, color-mix(in srgb, var(--cv-accent) 16%, transparent), transparent 70%),
+    color-mix(in srgb, var(--cv-accent) 4%, #FFFFFF);
+}
+.cv--spotlight .cv-sec > h2 {
+  font-size: 0.8em;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--cv-ink);
+  margin-bottom: 0.45em;
+  display: flex;
+  align-items: center;
+  gap: 0.6em;
+}
+.cv--spotlight .cv-sec > h2::before {
+  content: "";
+  width: 1.15em;
+  height: 1.15em;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--cv-accent) 18%, #FFFFFF);
+  border: 1.5px solid var(--cv-accent);
+  flex: none;
+}
+.cv--spotlight .cv-sec > h2::after { content: ""; flex: 1; border-top: 1.5px solid color-mix(in srgb, var(--cv-accent) 30%, #FFFFFF); }
+.cv--spotlight .pf-photo { border: 4px solid color-mix(in srgb, var(--cv-accent) 55%, #FFFFFF); }
+.cv--spotlight .cv-item h3 { color: var(--cv-ink); }
+.cv--spotlight .cv-dates { color: var(--cv-accent); font-weight: 600; }
+
+/* ---------- Neon ---------- */
+.cv--neon {
+  --cv-ink: #EDEDF4;
+  --cv-mut: #9A9AAC;
+  --cv-line: #2A2A38;
+  padding: 2.6em 2.8em;
+  background:
+    radial-gradient(70% 45% at 85% 10%, color-mix(in srgb, var(--cv-accent) 22%, transparent), transparent 70%),
+    #12121A;
+  color: var(--cv-ink);
+}
+.cv--neon .pf-role, .cv--neon .cv-item h3 { color: #FFFFFF; }
+.cv--neon .pf-role span { text-shadow: 0 0 14px color-mix(in srgb, var(--cv-accent) 70%, transparent); }
+.cv--neon .cv-sec > h2 {
+  font-size: 0.8em;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--cv-accent);
+  margin-bottom: 0.45em;
+}
+.cv--neon .cv-sec > h2::before { content: "// "; color: var(--cv-mut); }
+.cv--neon .pf-photo { background: #1C1C28; border: 2px solid color-mix(in srgb, var(--cv-accent) 60%, transparent); box-shadow: 0 0 30px color-mix(in srgb, var(--cv-accent) 30%, transparent); }
+.cv--neon .cv-skills li { border: 1px solid color-mix(in srgb, var(--cv-accent) 55%, transparent); border-radius: 999px; padding: 0.25em 0.9em; font-size: 0.85em; color: var(--cv-ink); }
+.cv--neon .cv-skills { display: flex; flex-wrap: wrap; gap: 0.5em; }
+.cv--neon .cv-item { border-left: 2px solid var(--cv-accent); padding-left: 1em; }
+.cv--neon .pf-foot { border-color: var(--cv-line); }
+
+/* ---------- Editorial ---------- */
+.cv--editorial {
+  padding: 2.8em 3em;
+  background: #F7F4EC;
+  font-family: var(--font-display);
+  --cv-ink: #2C2A24;
+  --cv-mut: #7A756A;
+  --cv-line: #E0DACB;
+}
+.cv--editorial .pf-display { font-weight: 600; text-transform: uppercase; letter-spacing: 0.02em; }
+.cv--editorial .pf-mark { font-size: 0.72em; font-weight: 600; letter-spacing: 0.26em; text-transform: uppercase; color: var(--cv-mut); }
+.cv--editorial .pf-script { font-size: 1.7em; color: var(--cv-accent); margin-top: 0; }
+.cv--editorial .pf-im { color: var(--cv-ink); text-transform: none; letter-spacing: 0; font-size: 1.25em; }
+.cv--editorial .pf-strip { border-top: none; padding-top: 0; margin-top: 0.4em; }
+.cv--editorial .cv-contact { margin-top: 1.2em; font-size: 0.82em; color: var(--cv-mut); }
+.cv--editorial .cv-contact li { margin-bottom: 0.35em; }
+.cv--editorial .cv-sec > h2 {
+  font-size: 0.78em;
+  font-weight: 600;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  margin-bottom: 0.6em;
+  color: var(--cv-ink);
+}
+.cv--editorial .cv-sec > h2::after { content: ""; display: block; width: 3em; border-top: 2px solid var(--cv-accent); margin-top: 0.5em; }
+.cv--editorial .pf-photo { border-radius: 45% 45% 42% 58% / 60% 55% 45% 40%; background: color-mix(in srgb, var(--cv-accent) 18%, #F7F4EC); }
+.cv--editorial .cv-skills { display: flex; flex-wrap: wrap; gap: 0.3em 0; }
+.cv--editorial .cv-skills li { font-size: 0.88em; }
+.cv--editorial .cv-skills li:not(:last-child)::after { content: "·"; margin: 0 0.7em; color: var(--cv-accent); }

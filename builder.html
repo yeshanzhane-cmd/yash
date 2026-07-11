@@ -47,9 +47,21 @@
         <p>Your details render live into four distinct layouts — switch templates and colors until it feels like you, then download the PDF.</p>
       </header>
 
+      <div class="controls" role="group" aria-label="Start from a preset">
+        <div class="group" id="preset-group" role="group" aria-label="Role presets">
+          <span>Presets</span>
+        </div>
+        <div class="group spacer">
+          <button class="btn btn--ghost" id="signature-btn" type="button" style="padding: 10px 20px; font-size: 14px;" title="A template, color and photo shape derived from your account — unique to you">✨ My signature look</button>
+        </div>
+      </div>
+
       <div class="controls" role="group" aria-label="Design controls">
-        <div class="group" id="tpl-group" role="group" aria-label="Template">
-          <span>Template</span>
+        <div class="group" id="tpl-group-cv" role="group" aria-label="CV templates">
+          <span>CV</span>
+        </div>
+        <div class="group" id="tpl-group-pf" role="group" aria-label="Portfolio themes">
+          <span>Portfolio</span>
         </div>
         <div class="group" id="color-group" role="group" aria-label="Accent color">
           <span>Color</span>
@@ -140,7 +152,11 @@
       }
 
       /* ----- template + color controls ----- */
-      const tplGroup = document.getElementById('tpl-group');
+      function syncPickers() {
+        document.querySelectorAll('.tpl-btn[data-tpl]').forEach((x) => x.setAttribute('aria-pressed', String(x.dataset.tpl === cv.template)));
+        document.querySelectorAll('.swatch').forEach((x) => x.setAttribute('aria-pressed', String(x.dataset.hex === cv.accent)));
+      }
+
       CV_TEMPLATES.forEach((t) => {
         const b = document.createElement('button');
         b.type = 'button';
@@ -148,12 +164,8 @@
         b.textContent = t.name;
         b.dataset.tpl = t.id;
         b.setAttribute('aria-pressed', String(cv.template === t.id));
-        b.addEventListener('click', () => {
-          cv.template = t.id;
-          tplGroup.querySelectorAll('.tpl-btn').forEach((x) => x.setAttribute('aria-pressed', String(x.dataset.tpl === t.id)));
-          update();
-        });
-        tplGroup.appendChild(b);
+        b.addEventListener('click', () => { cv.template = t.id; syncPickers(); update(); });
+        document.getElementById(t.group === 'CV' ? 'tpl-group-cv' : 'tpl-group-pf').appendChild(b);
       });
 
       const colorGroup = document.getElementById('color-group');
@@ -166,13 +178,36 @@
         b.dataset.hex = c.hex;
         b.setAttribute('aria-label', `Accent color ${c.id}`);
         b.setAttribute('aria-pressed', String(cv.accent === c.hex));
-        b.addEventListener('click', () => {
-          cv.accent = c.hex;
-          colorGroup.querySelectorAll('.swatch').forEach((x) => x.setAttribute('aria-pressed', String(x.dataset.hex === c.hex)));
-          update();
-        });
+        b.addEventListener('click', () => { cv.accent = c.hex; syncPickers(); update(); });
         colorGroup.appendChild(b);
       });
+
+      /* ----- role presets: preloaded starter content + matching theme ----- */
+      const presetGroup = document.getElementById('preset-group');
+      CV_PRESETS.forEach((p) => {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'tpl-btn';
+        b.textContent = p.label;
+        b.addEventListener('click', () => {
+          if (!confirm(`Load the ${p.label} preset? Your current entries will be replaced (name, email and photo are kept).`)) return;
+          const keep = { name: cv.name, email: cv.email, phone: cv.phone, photo: cv.photo, blob: cv.blob };
+          Object.assign(cv, JSON.parse(JSON.stringify(p.data)), keep, { template: p.template, accent: p.accent });
+          fillForm(); renderEntries(); syncPickers(); update();
+        });
+        presetGroup.appendChild(b);
+      });
+
+      /* ----- signature look: deterministic, unique per account ----- */
+      document.getElementById('signature-btn').addEventListener('click', () => {
+        Object.assign(cv, signatureMix(user.email));
+        syncPickers(); update();
+      });
+
+      function fillForm() {
+        form.querySelectorAll('[data-key]').forEach((input) => { input.value = cv[input.dataset.key] || ''; });
+        skillsInput.value = cv.skills.join(', ');
+      }
 
       /* ----- simple fields ----- */
       form.querySelectorAll('[data-key]').forEach((input) => {
