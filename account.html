@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Account — E-CV Store</title>
+  <meta name="description" content="Your E-CV Store account and order history.">
+  <meta name="robots" content="noindex">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@500;600;700;800&family=Geist:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="assets/css/base.css">
+  <link rel="stylesheet" href="assets/css/store.css">
+  <link rel="stylesheet" href="assets/css/pages.css">
+</head>
+<body>
+
+  <nav class="nav" aria-label="Primary">
+    <div class="wrap nav__inner">
+      <a class="wordmark" href="index.html">E-CV <em>Store</em></a>
+      <ul class="nav__links">
+        <li><a href="shop.html">Templates</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="support.html">Support</a></li>
+        <li><a href="account.html" aria-current="page">Account</a></li>
+      </ul>
+      <div class="nav__actions">
+        <a class="cart-btn" href="account.html" aria-label="Account">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </a>
+        <a class="cart-btn" href="cart.html" aria-label="Cart">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
+          <span class="badge" id="cart-badge" hidden>0</span>
+        </a>
+        <a class="btn btn--accent nav__shop" href="shop.html">Browse templates</a>
+      </div>
+    </div>
+  </nav>
+
+  <main style="padding-bottom: 96px;">
+    <header class="page-head" style="padding-bottom: 48px;">
+      <div class="wrap">
+        <span class="eyebrow">Your space</span>
+        <h1>Account</h1>
+      </div>
+    </header>
+
+    <div class="wrap">
+      <p class="demo-note">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink:0; margin-top:3px;"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+        <span><strong>Demo account.</strong> Sign-in is stored only in this browser — no password, no server. Connect a real auth provider to take it live.</span>
+      </p>
+
+      <div id="account-root"></div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap">
+      <div class="footer__base" style="border-top: 1px solid var(--hairline);">
+        <span>© 2026 E-CV Store. All rights reserved.</span>
+        <span>Designed to get you hired.</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="assets/js/products.js" defer></script>
+  <script src="assets/js/cart.js" defer></script>
+  <script src="assets/js/ui.js" defer></script>
+  <script defer>
+    document.addEventListener('DOMContentLoaded', () => {
+      const root = document.getElementById('account-root');
+      const USER_KEY = 'ecv-user';
+      const ORDERS_KEY = 'ecv-orders';
+
+      const readJSON = (key, fallback) => {
+        try { return JSON.parse(localStorage.getItem(key)) ?? fallback; } catch { return fallback; }
+      };
+
+      function ordersHTML() {
+        const orders = readJSON(ORDERS_KEY, []);
+        if (!orders.length) {
+          return `
+            <div class="empty-state">
+              <h2>No orders yet</h2>
+              <p>Templates you buy will appear here with their order numbers.</p>
+              <a class="btn btn--accent" href="shop.html">Browse templates</a>
+            </div>`;
+        }
+        return orders.map((o) => `
+          <article class="order-card">
+            <div class="order-card__head">
+              <strong>${o.id}</strong>
+              <span>${new Date(o.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
+            </div>
+            <ul>
+              ${o.items.map((it) => `<li><span>${it.name} <span class="qty-tag">× ${it.qty}</span></span><span>${money.format(it.total)}</span></li>`).join('')}
+            </ul>
+            <div class="order-card__total"><span>Total</span><span>${money.format(o.total)}</span></div>
+          </article>`).join('');
+      }
+
+      function renderSignedIn(user) {
+        root.innerHTML = `
+          <div class="account-head">
+            <div>
+              <h2 style="font-size: 26px; margin-bottom: 4px;">Welcome back, ${user.name.split(' ')[0]}</h2>
+              <p style="color: var(--stone); font-size: 15px;">${user.email}</p>
+            </div>
+            <button class="btn btn--ghost" id="signout-btn" type="button">Sign out</button>
+          </div>
+          <h2 style="font-size: 22px; margin-bottom: 20px;">Order history</h2>
+          ${ordersHTML()}`;
+        document.getElementById('signout-btn').addEventListener('click', () => {
+          localStorage.removeItem(USER_KEY);
+          render();
+        });
+      }
+
+      function renderSignedOut() {
+        root.innerHTML = `
+          <div class="auth-grid">
+            <section class="panel" aria-labelledby="signin-title">
+              <h2 id="signin-title">Sign in</h2>
+              <p>Pick up where you left off — orders and updates live here.</p>
+              <form id="signin-form" novalidate>
+                <div class="field">
+                  <label for="si-email">Email address</label>
+                  <input class="input" type="email" id="si-email" autocomplete="email" placeholder="you@example.com" required>
+                  <span class="field-error" aria-live="polite"></span>
+                </div>
+                <button class="btn btn--accent" type="submit">Sign in</button>
+              </form>
+            </section>
+            <section class="panel" aria-labelledby="signup-title">
+              <h2 id="signup-title">Create account</h2>
+              <p>One step. Your purchases attach automatically.</p>
+              <form id="signup-form" novalidate>
+                <div class="field">
+                  <label for="su-name">Full name</label>
+                  <input class="input" type="text" id="su-name" autocomplete="name" required>
+                  <span class="field-error" aria-live="polite"></span>
+                </div>
+                <div class="field">
+                  <label for="su-email">Email address</label>
+                  <input class="input" type="email" id="su-email" autocomplete="email" placeholder="you@example.com" required>
+                  <span class="field-error" aria-live="polite"></span>
+                </div>
+                <button class="btn btn--accent" type="submit">Create account</button>
+              </form>
+            </section>
+          </div>`;
+
+        const emailOk = (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+        const fail = (input, text) => {
+          input.classList.add('has-error');
+          input.parentElement.querySelector('.field-error').textContent = text;
+          input.focus();
+        };
+
+        document.getElementById('signin-form').addEventListener('submit', (e) => {
+          e.preventDefault();
+          const input = document.getElementById('si-email');
+          const email = input.value.trim();
+          if (!emailOk(email)) { fail(input, 'Enter a valid email address.'); return; }
+          // Demo sign-in: derive a display name from the email address.
+          const name = email.split('@')[0].replace(/[._-]+/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
+          localStorage.setItem(USER_KEY, JSON.stringify({ name, email }));
+          render();
+        });
+
+        document.getElementById('signup-form').addEventListener('submit', (e) => {
+          e.preventDefault();
+          const nameInput = document.getElementById('su-name');
+          const emailInput = document.getElementById('su-email');
+          if (!nameInput.value.trim()) { fail(nameInput, 'Enter your name.'); return; }
+          if (!emailOk(emailInput.value.trim())) { fail(emailInput, 'Enter a valid email address.'); return; }
+          localStorage.setItem(USER_KEY, JSON.stringify({ name: nameInput.value.trim(), email: emailInput.value.trim() }));
+          render();
+        });
+
+        root.querySelectorAll('.input').forEach((input) => {
+          input.addEventListener('input', () => {
+            input.classList.remove('has-error');
+            input.parentElement.querySelector('.field-error').textContent = '';
+          });
+        });
+      }
+
+      function render() {
+        const user = readJSON(USER_KEY, null);
+        if (user && user.email) { renderSignedIn(user); } else { renderSignedOut(); }
+      }
+
+      render();
+    });
+  </script>
+</body>
+</html>
