@@ -69,8 +69,11 @@ assets/
 - **Checkout is a demo.** No payment is processed and no card data leaves the
   page. To take real orders, replace the submit handler in `checkout.html`
   with a payment provider integration (e.g. Stripe Checkout).
-- **Design system**: Syne + Geist, rich black `#0C0C10`, cyan glow `#5EEAD4`,
-  violet `#A78BFA`. All template art is CSS-drawn — zero image assets.
+- **Design system**: Syne + Geist on a futuristic white hex-tile ground —
+  an inline SVG honeycomb with glowing cyan-blue seams (crisp at any size,
+  zero image files) under white glass panels. Accents: cyan `#0FA8CE` and
+  blue `#4D7CFE` with neon glows. The lamp-scene login intentionally stays
+  dark. All product/template art is CSS-drawn.
 
 ## Deploying
 

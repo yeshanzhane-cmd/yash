@@ -42,9 +42,9 @@
 }
 .filter-btn:hover { border-color: var(--terracotta); color: var(--terracotta); box-shadow: var(--glow); }
 .filter-btn[aria-pressed="true"] {
-  background: linear-gradient(100deg, var(--terracotta), #7DE8FF);
+  background: linear-gradient(100deg, #0FA8CE, #2F6BFF);
   border-color: transparent;
-  color: #06060A;
+  color: #FFFFFF;
   box-shadow: var(--glow);
 }
 
@@ -85,8 +85,8 @@
 .product__art {
   position: relative;
   background:
-    radial-gradient(120% 90% at 20% 0%, rgba(94, 234, 212, 0.10), transparent 55%),
-    radial-gradient(120% 90% at 90% 100%, rgba(167, 139, 250, 0.10), transparent 55%),
+    radial-gradient(120% 90% at 20% 0%, rgba(24, 170, 210, 0.14), transparent 55%),
+    radial-gradient(120% 90% at 90% 100%, rgba(77, 124, 254, 0.12), transparent 55%),
     var(--sand-deep);
   border: 1px solid var(--hairline);
   border-radius: var(--radius);
@@ -190,7 +190,7 @@
 .cart-line__art .art-stack b { border-radius: 4px; }
 .cart-line__art .art-stack b:nth-child(3) { padding: 6px; gap: 3px; }
 .cart-line__art .art-stack b:nth-child(3)::before { height: 8px; }
-.cart-line__art .art-frame { width: 56%; font-size: 10px; box-shadow: 4px 4px 0 rgba(94, 234, 212, 0.25); }
+.cart-line__art .art-frame { width: 56%; font-size: 10px; box-shadow: 4px 4px 0 rgba(24, 170, 210, 0.3); }
 .cart-line__art .art-grid { gap: 4px; width: 68%; }
 .cart-line__art .art-grid i { border-radius: 3px; }
 
@@ -215,7 +215,7 @@
 
 /* ---------- Order summary ---------- */
 .summary {
-  background: linear-gradient(160deg, var(--sand), #101016);
+  background: rgba(255, 255, 255, 0.92);
   border: 1px solid var(--hairline);
   border-radius: var(--radius);
   padding: 32px;
@@ -249,7 +249,7 @@
   align-items: flex-start;
   padding: 16px 20px;
   background: var(--sand);
-  border: 1px solid rgba(167, 139, 250, 0.4);
+  border: 1px solid rgba(77, 124, 254, 0.45);
   border-radius: 8px;
   font-size: 14px;
   color: var(--stone);
@@ -282,7 +282,7 @@
   height: 72px;
   border-radius: 50%;
   background: linear-gradient(135deg, var(--terracotta), var(--violet));
-  color: #06060A;
+  color: #FFFFFF;
   margin-bottom: 32px;
   box-shadow: var(--glow-strong);
 }

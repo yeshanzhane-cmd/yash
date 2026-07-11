@@ -18,7 +18,7 @@
 @media (min-width: 1100px) { .workspace { grid-template-columns: 5fr 7fr; } }
 
 .editor {
-  background: linear-gradient(160deg, var(--sand), #101016);
+  background: rgba(255, 255, 255, 0.92);
   border: 1px solid var(--hairline);
   border-radius: var(--radius);
   padding: 32px 28px;
@@ -69,7 +69,7 @@
   align-items: center;
   padding: 20px 24px;
   margin-bottom: 24px;
-  background: linear-gradient(160deg, var(--sand), #101016);
+  background: rgba(255, 255, 255, 0.92);
   border: 1px solid var(--hairline);
   border-radius: var(--radius);
 }
@@ -89,9 +89,9 @@
 }
 .tpl-btn:hover { border-color: var(--terracotta); color: var(--terracotta); }
 .tpl-btn[aria-pressed="true"] {
-  background: linear-gradient(100deg, var(--terracotta), #7DE8FF);
+  background: linear-gradient(100deg, #0FA8CE, #2F6BFF);
   border-color: transparent;
-  color: #06060A;
+  color: #FFFFFF;
   box-shadow: var(--glow);
 }
 
@@ -105,13 +105,13 @@
   transition: transform 0.15s ease, box-shadow 0.2s ease;
 }
 .swatch:hover { transform: scale(1.12); }
-.swatch[aria-pressed="true"] { border-color: var(--ink); box-shadow: 0 0 14px var(--sw, rgba(94,234,212,0.6)); }
+.swatch[aria-pressed="true"] { border-color: var(--ink); box-shadow: 0 0 14px var(--sw, rgba(24,170,210,0.6)); }
 
 .controls .spacer { margin-left: auto; }
 
 /* ---------- Preview surface ---------- */
 .preview-well {
-  background: #08080B;
+  background: rgba(227, 238, 241, 0.75);
   border: 1px solid var(--hairline);
   border-radius: var(--radius);
   padding: clamp(12px, 3vw, 40px);
@@ -132,7 +132,7 @@
   background: #FDFDFB;
   color: var(--cv-ink);
   border-radius: 4px;
-  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 24px 56px rgba(14, 90, 116, 0.3);
   overflow: hidden;
   font-size: clamp(8px, 1.35vw, 12.5px);
   line-height: 1.5;
