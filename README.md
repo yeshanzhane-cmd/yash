@@ -1,4 +1,4 @@
-# E-CV Store — Resume & CV Template Shop
+# MOMO Store — Resume & CV Template Shop
 
 A no-build, static e-commerce storefront selling career templates — ATS-friendly
 resumes, CVs, cover letter kits, portfolio templates and bundles. Dark,

@@ -1,4 +1,4 @@
-/* E-CV Store — CV & portfolio builder engine.
+/* MOMO Store — CV & portfolio builder engine.
    One data model (ecv-cv in localStorage) rendered through eight template
    renderers: four CV layouts and four portfolio themes modeled on the
    E_CV studio artwork (numbered "PORTFOLIO." pages, role spotlight cards,

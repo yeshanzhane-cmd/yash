@@ -1,4 +1,4 @@
-/* E-CV Store — shared UI: money formatting, CSS template art, product cards,
+/* MOMO Store — shared UI: money formatting, CSS template art, product cards,
    scroll reveals, 3D card tilt, hero pointer parallax, quick-view popup. */
 
 const money = new Intl.NumberFormat("en-US", {
@@ -45,7 +45,7 @@ function productCardHTML(product, extraClass = "") {
         <div class="mcard__img card__art">${artHTML(product.art)}</div>
         <h3 class="mcard__title">${product.name}</h3>
         <div class="mcard__meta">${starsHTML(d.rating)}<b>${d.rating.toFixed(1)}</b><span>(${fmtCount(d.reviews)})</span></div>
-        <div class="mcard__sold">${fmtCount(d.sold)}+ sold</div>
+        <div class="mcard__sold">${fmtCount(d.downloads)}+ downloads</div>
         <div class="mcard__price">
           <b>${money.format(product.price)}</b>
           <s>${money.format(d.listPrice)}</s>

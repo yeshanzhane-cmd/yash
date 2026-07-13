@@ -1,4 +1,4 @@
-/* E-CV Store — cart state, persisted in localStorage as { productId: qty }.
+/* MOMO Store — cart state, persisted in localStorage as { productId: qty }.
    Emits "cart:change" on document so any page section can react. */
 
 const Cart = {
