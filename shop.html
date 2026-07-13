@@ -16,6 +16,8 @@
 </head>
 <body>
 
+  <div class="promo-bar">🚚 <b>Free shipping</b> on orders over $29 &nbsp;·&nbsp; ⚡ Flash deals end tonight &nbsp;·&nbsp; 30-day returns</div>
+
   <nav class="nav" aria-label="Primary">
     <div class="wrap nav__inner">
       <a class="wordmark" href="index.html">E-CV <em>Store</em></a>
@@ -40,19 +42,37 @@
   </nav>
 
   <main>
-    <header class="page-head">
+    <header class="page-head" style="padding-top: 40px;">
       <div class="wrap">
-        <span class="eyebrow">The template shelf</span>
-        <h1>Every template, one shelf</h1>
-        <p>The complete E-CV catalogue. Filter by goal — every template is ATS-parse tested and recruiter-reviewed.</p>
+        <span class="eyebrow">Marketplace</span>
+        <h1>Today's best deals</h1>
       </div>
     </header>
 
     <div class="wrap">
-      <div class="filters" role="group" aria-label="Filter products by category" id="filters">
+      <div class="flash-head">
+        <h2>⚡ <b>Flash deals</b></h2>
+        <span class="flash-timer">Ends in <b id="ft-h">00</b>:<b id="ft-m">00</b>:<b id="ft-s">00</b></span>
+      </div>
+      <div class="deal-rail" id="deal-rail" aria-label="Flash deals"></div>
+
+      <div class="market-controls">
+        <label class="visually-hidden" for="q">Search products</label>
+        <input class="input" type="search" id="q" placeholder="Search 38 products…">
+        <label class="visually-hidden" for="sort">Sort by</label>
+        <select class="input" id="sort">
+          <option value="featured">Recommended</option>
+          <option value="price-asc">Price: low to high</option>
+          <option value="price-desc">Price: high to low</option>
+          <option value="rating">Top rated</option>
+          <option value="discount">Biggest discount</option>
+        </select>
+      </div>
+
+      <div class="filters" role="group" aria-label="Filter products by category" id="filters" style="margin: 8px 0 20px;">
         <span class="shop-count" id="shop-count" role="status" aria-live="polite"></span>
       </div>
-      <section class="shop-grid" id="shop-grid" aria-label="Products" style="padding: 0 0 96px;"></section>
+      <section class="market-grid" id="shop-grid" aria-label="Products"></section>
     </div>
   </main>
 
@@ -104,20 +124,43 @@
       const countEl = document.getElementById('shop-count');
       const params = new URLSearchParams(location.search);
       let active = CATEGORIES.includes(params.get('cat')) ? params.get('cat') : 'All';
+      let query = '';
+      let sort = 'featured';
+
+      // Flash-deal rail (deterministic picks) + countdown to midnight.
+      document.getElementById('deal-rail').innerHTML =
+        PRODUCTS.filter(p => dealInfo(p).flash).slice(0, 10).map(p => productCardHTML(p)).join('');
+      function tick() {
+        const now = new Date();
+        const end = new Date(now); end.setHours(24, 0, 0, 0);
+        let s = Math.max(0, Math.floor((end - now) / 1000));
+        document.getElementById('ft-h').textContent = String(Math.floor(s / 3600)).padStart(2, '0');
+        document.getElementById('ft-m').textContent = String(Math.floor(s / 60) % 60).padStart(2, '0');
+        document.getElementById('ft-s').textContent = String(s % 60).padStart(2, '0');
+      }
+      tick(); setInterval(tick, 1000);
+
+      const SORTS = {
+        'price-asc': (a, b) => a.price - b.price,
+        'price-desc': (a, b) => b.price - a.price,
+        'rating': (a, b) => dealInfo(b).rating - dealInfo(a).rating,
+        'discount': (a, b) => dealInfo(b).discount - dealInfo(a).discount
+      };
 
       function render() {
-        const items = active === 'All' ? PRODUCTS : PRODUCTS.filter(p => p.category === active);
+        let items = active === 'All' ? [...PRODUCTS] : PRODUCTS.filter(p => p.category === active);
+        if (query) items = items.filter(p => p.name.toLowerCase().includes(query));
+        if (SORTS[sort]) items.sort(SORTS[sort]);
         if (items.length === 0) {
           grid.innerHTML = `
             <div class="empty-state">
-              <h2>Nothing on this shelf yet</h2>
-              <p>New templates ship monthly — join the update list to hear first.</p>
-              <a class="btn" href="index.html#drops">Get notified</a>
+              <h2>No products match</h2>
+              <p>Try a different search or category.</p>
             </div>`;
         } else {
           grid.innerHTML = items.map(p => productCardHTML(p)).join('');
         }
-        countEl.textContent = `${items.length} template${items.length === 1 ? '' : 's'}`;
+        countEl.textContent = `${items.length} product${items.length === 1 ? '' : 's'}`;
         filters.querySelectorAll('.filter-btn').forEach(btn => {
           btn.setAttribute('aria-pressed', String(btn.dataset.cat === active));
         });
@@ -135,6 +178,13 @@
         btn.setAttribute('aria-pressed', 'false');
         btn.addEventListener('click', () => { active = cat; render(); });
         filters.insertBefore(btn, countEl);
+      });
+
+      document.getElementById('q').addEventListener('input', (e) => {
+        query = e.target.value.trim().toLowerCase(); render();
+      });
+      document.getElementById('sort').addEventListener('change', (e) => {
+        sort = e.target.value; render();
       });
 
       render();

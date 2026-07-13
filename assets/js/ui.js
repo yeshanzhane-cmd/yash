@@ -21,27 +21,50 @@ function artHTML(art) {
       return `<div class="art-frame" aria-hidden="true">${art.word}</div>`;
     case "grid":
       return `<div class="art-grid" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>`;
+    case "emoji":
+      return `<div class="art-photo" style="--tint:${art.tint}" aria-hidden="true">${art.glyph}</div>`;
     default:
       return "";
   }
 }
 
+function starsHTML(rating) {
+  const pct = Math.round((rating / 5) * 100);
+  return `<span class="stars" aria-label="Rated ${rating} out of 5"><i style="width:${pct}%">★★★★★</i>★★★★★</span>`;
+}
+
+/* Marketplace product card: deal price, rating, sold count, urgency badge
+   and a one-tap add-to-cart button (handled by the delegated listener). */
 function productCardHTML(product, extraClass = "") {
+  const d = dealInfo(product);
+  const badgeCls = d.badge === "Almost gone" ? "hot" : d.badge === "New" ? "new" : "top";
   return `
-    <article class="card tilt ${extraClass}" data-id="${product.id}">
-      <button class="qv-btn" type="button" data-quickview="${product.id}">Quick view</button>
-      <a class="card__link" href="product.html?id=${product.id}" aria-label="${product.name}, ${money.format(product.price)}">
-        <div class="card__art">${artHTML(product.art)}</div>
-        <div class="card__body">
-          <div>
-            <span class="card__cat">${product.category}</span>
-            <h3>${product.name}</h3>
-          </div>
-          <span class="card__price">${money.format(product.price)}</span>
+    <article class="mcard ${extraClass}" data-id="${product.id}">
+      ${d.badge ? `<span class="mcard__badge mcard__badge--${badgeCls}">${d.badge}</span>` : ""}
+      <a class="mcard__link" href="product.html?id=${product.id}" aria-label="${product.name}, ${money.format(product.price)}">
+        <div class="mcard__img card__art">${artHTML(product.art)}</div>
+        <h3 class="mcard__title">${product.name}</h3>
+        <div class="mcard__meta">${starsHTML(d.rating)}<b>${d.rating.toFixed(1)}</b><span>(${fmtCount(d.reviews)})</span></div>
+        <div class="mcard__sold">${fmtCount(d.sold)}+ sold</div>
+        <div class="mcard__price">
+          <b>${money.format(product.price)}</b>
+          <s>${money.format(d.listPrice)}</s>
+          <i>-${d.discount}%</i>
         </div>
       </a>
+      <button class="mcard__add" type="button" data-add="${product.id}" aria-label="Add ${product.name} to cart">+</button>
     </article>`;
 }
+
+/* One-tap add-to-cart for marketplace cards, delegated so injected grids work. */
+document.addEventListener("click", (e) => {
+  const btn = e.target.closest("[data-add]");
+  if (!btn) return;
+  Cart.add(btn.dataset.add, 1);
+  btn.classList.add("added");
+  btn.textContent = "✓";
+  setTimeout(() => { btn.classList.remove("added"); btn.textContent = "+"; }, 900);
+});
 
 /* ---------- Scroll reveals ---------- */
 /* Content stays visible without JS because the hidden state is scoped to html.js. */

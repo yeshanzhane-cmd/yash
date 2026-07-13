@@ -48,7 +48,7 @@
       <div class="section-head">
         <div>
           <span class="eyebrow">Pairs well with</span>
-          <h2 id="related-title">Candidates also bought</h2>
+          <h2 id="related-title">Customers also bought</h2>
         </div>
         <a class="text-link" href="shop.html">View all templates</a>
       </div>
@@ -113,13 +113,13 @@
         return;
       }
 
+      const deal = dealInfo(product);
       document.title = `${product.name} — E-CV Store`;
 
       root.innerHTML = `
         <ol class="breadcrumb">
           <li><a href="index.html">Home</a></li>
-          <li><a href="shop.html">Templates</a></li>
-        <li><a href="builder.html">CV Builder</a></li>
+          <li><a href="shop.html">Shop</a></li>
           <li><a href="shop.html?cat=${encodeURIComponent(product.category)}">${product.category}</a></li>
           <li aria-current="page">${product.name}</li>
         </ol>
@@ -128,7 +128,13 @@
           <div class="product__info">
             <span class="card__cat">${product.category}</span>
             <h1>${product.name}</h1>
-            <p class="product__price">${money.format(product.price)}</p>
+            <div class="deal-line">${starsHTML(deal.rating)} <b>${deal.rating.toFixed(1)}</b> · ${fmtCount(deal.reviews)} reviews · <b>${fmtCount(deal.sold)}+</b> sold</div>
+            <div class="price-line">
+              <p class="product__price">${money.format(product.price)}</p>
+              <s>${money.format(deal.listPrice)}</s>
+              <i>-${deal.discount}% today</i>
+            </div>
+            <p class="ship-line"><b>Free shipping</b> on orders over $29 · 30-day returns</p>
             <p class="product__blurb">${product.blurb}</p>
             <ul class="product__details">
               ${product.details.map(([k, v]) => `<li><span>${k}</span><span>${v}</span></li>`).join('')}
