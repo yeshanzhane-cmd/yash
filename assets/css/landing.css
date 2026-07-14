@@ -64,7 +64,8 @@
 }
 .hero__meta span { font-size: 14px; color: var(--stone); }
 
-/* 3D floating resume stage — parallax layers driven by pointer (ui.js). */
+/* 3D floating asset showcase — parallax layers driven by pointer (ui.js).
+   Each tile previews a real product category (graphics, type, UI kit). */
 .stage {
   position: relative;
   height: 460px;
@@ -80,17 +81,19 @@
   filter: blur(10px);
 }
 
+/* Shared floating card: absolute position, parallax transform, idle float.
+   Kept class name .float-doc so ui.js parallax targets it unchanged. */
 .float-doc {
   position: absolute;
-  width: 220px;
-  aspect-ratio: 3 / 4;
-  background: #F4F2EE;
-  border-radius: 12px;
-  padding: 20px;
+  width: 224px;
+  aspect-ratio: 4 / 5;
+  background: #FFFFFF;
+  border-radius: 16px;
+  padding: 18px;
   display: flex;
   flex-direction: column;
-  gap: 9px;
-  box-shadow: 0 30px 60px rgba(14, 90, 116, 0.3), 0 0 0 1px rgba(18, 48, 60, 0.06);
+  gap: 14px;
+  box-shadow: 0 30px 60px rgba(14, 90, 116, 0.3), 0 0 0 1px rgba(18, 48, 60, 0.05);
   transform:
     rotateX(calc(6deg + var(--px, 0) * -4deg))
     rotateY(calc(var(--base-ry, 0deg) + var(--py, 0) * 5deg))
@@ -98,15 +101,73 @@
   transition: transform 0.15s ease-out;
   animation: float 7s ease-in-out infinite;
 }
-.float-doc i { display: block; height: 7px; border-radius: 4px; background: #C9C4BA; }
-.float-doc .hd { height: 26px; width: 62%; border-radius: 5px; background: #23232E; margin-bottom: 5px; }
-.float-doc .ac { width: 44%; height: 9px; background: linear-gradient(90deg, var(--terracotta-deep), var(--violet)); }
-.float-doc i:nth-child(odd) { width: 90%; }
-.float-doc i:nth-child(even) { width: 72%; }
 
-.float-doc--a { top: 4%; left: 6%; --base-ry: -14deg; --z: 60px; z-index: 3; }
-.float-doc--b { top: 22%; right: 4%; --base-ry: 12deg; --z: 10px; width: 190px; animation-delay: -2.4s; opacity: 0.95; }
-.float-doc--c { bottom: 0; left: 26%; --base-ry: -4deg; --z: -40px; width: 175px; animation-delay: -4.8s; opacity: 0.85; }
+.float-doc--a { top: 2%; left: 4%; --base-ry: -14deg; --z: 60px; z-index: 3; }
+.float-doc--b { top: 20%; right: 2%; --base-ry: 12deg; --z: 10px; width: 200px; animation-delay: -2.4s; z-index: 2; }
+.float-doc--c { bottom: 0; left: 22%; --base-ry: -4deg; --z: -40px; width: 186px; animation-delay: -4.8s; opacity: 0.97; }
+
+/* Category tag pill shared by every tile */
+.asset-tag {
+  align-self: flex-start;
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--terracotta-deep);
+  background: rgba(24, 170, 210, 0.10);
+  border: 1px solid rgba(24, 170, 210, 0.28);
+  padding: 4px 10px;
+  border-radius: 999px;
+}
+
+/* Tile A — graphics pack: gradient canvas + colour swatches */
+.asset-canvas {
+  flex: 1;
+  border-radius: 10px;
+  background:
+    radial-gradient(120% 90% at 15% 12%, #FFD16E, transparent 46%),
+    radial-gradient(120% 120% at 92% 22%, #FF7AA2, transparent 52%),
+    linear-gradient(150deg, #6EA8FF, #9B6BFF);
+  box-shadow: inset 0 0 0 1px rgba(18, 48, 60, 0.06);
+}
+.asset-swatches { display: flex; gap: 8px; }
+.asset-swatches i { flex: 1; height: 14px; border-radius: 5px; }
+.asset-swatches i:nth-child(1) { background: #FFD16E; }
+.asset-swatches i:nth-child(2) { background: #FF7AA2; }
+.asset-swatches i:nth-child(3) { background: #6EA8FF; }
+.asset-swatches i:nth-child(4) { background: #9B6BFF; }
+
+/* Tile B — font specimen: oversized glyph + weight bars */
+.asset-glyph {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 78px;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+.asset-weights { display: flex; flex-direction: column; gap: 6px; }
+.asset-weights i { height: 7px; border-radius: 4px; background: #D5DEE2; }
+.asset-weights i:nth-child(1) { width: 88%; background: var(--ink); }
+.asset-weights i:nth-child(2) { width: 64%; }
+.asset-weights i:nth-child(3) { width: 78%; }
+
+/* Tile C — UI kit wireframe */
+.asset-wire-bar { height: 16px; border-radius: 5px; background: linear-gradient(90deg, var(--terracotta-deep), var(--violet)); }
+.asset-wire-hero {
+  flex: 1;
+  border-radius: 8px;
+  background: #EAF1F4;
+  box-shadow: inset 0 0 0 1px rgba(18, 48, 60, 0.05);
+}
+.asset-wire-cols { display: flex; gap: 8px; }
+.asset-wire-cols i { flex: 1; height: 34px; border-radius: 7px; background: #EAF1F4; }
+.asset-wire-cols i:nth-child(1) { background: rgba(24, 170, 210, 0.16); }
 
 .float-chip {
   position: absolute;
