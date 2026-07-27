@@ -1,0 +1,48 @@
+{
+  "expo": {
+    "name": "Nizwa Taxi",
+    "slug": "nizwa-taxi",
+    "scheme": "nizwataxi",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "backgroundColor": "#0B3226",
+    "primaryColor": "#0B3226",
+    "newArchEnabled": true,
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "om.nizwataxi.app",
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "Nizwa Taxi uses your location to show nearby drivers and to share your pickup point accurately.",
+        "NSLocationAlwaysAndWhenInUseUsageDescription": "Nizwa Taxi uses your location in the background during an active trip so your driver and, if you choose to share it, your contacts can follow your route."
+      }
+    },
+    "android": {
+      "package": "om.nizwataxi.app",
+      "adaptiveIcon": {
+        "backgroundColor": "#0B3226",
+        "foregroundImage": "./assets/android-icon-foreground.png",
+        "backgroundImage": "./assets/android-icon-background.png",
+        "monochromeImage": "./assets/android-icon-monochrome.png"
+      },
+      "predictiveBackGestureEnabled": false,
+      "permissions": [
+        "ACCESS_COARSE_LOCATION",
+        "ACCESS_FINE_LOCATION"
+      ]
+    },
+    "web": {
+      "favicon": "./assets/favicon.png",
+      "bundler": "metro"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-font",
+      "expo-splash-screen"
+    ],
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}

@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nizwa Taxi — Command Centre</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700;800;900&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --fort:#0B3226;
+  --falaj:#2E7D5B;
+  --sand:#E4D9BE;
+  --copper:#A9662B;
+  --clay:#8C3B2E;
+  --basalt:#17150F;
+  --limewash:#FBF8F1;
+  --amber:#E8892B;
+  --line:rgba(23,21,15,.14);
+  --line-2:rgba(23,21,15,.07);
+  --ink-60:rgba(23,21,15,.6);
+  --ink-40:rgba(23,21,15,.4);
+  --disp:"Archivo",system-ui,sans-serif;
+  --body:"IBM Plex Sans Arabic",system-ui,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,monospace;
+  --sidebar-w:252px;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--limewash);color:var(--basalt);font-family:var(--body);font-size:14px;line-height:1.5}
+h1,h2,h3,h4{font-family:var(--disp);font-weight:800;letter-spacing:-.03em;line-height:1.1;margin:0}
+p{margin:0}
+button{font-family:inherit;cursor:pointer}
+input,select,textarea{font-family:inherit;font-size:13.5px}
+:focus-visible{outline:3px solid var(--copper);outline-offset:2px}
+a{color:inherit}
+
+/* ===== APP SHELL ===== */
+.app{display:flex;min-height:100vh}
+.sidebar{
+  width:var(--sidebar-w);flex:0 0 auto;background:var(--fort);color:var(--sand);
+  position:fixed;top:0;left:0;bottom:0;display:flex;flex-direction:column;
+  padding:22px 16px;overflow-y:auto;z-index:20;
+}
+.brand{display:flex;align-items:center;gap:10px;padding:0 6px 22px;border-bottom:1px solid rgba(228,217,190,.14);margin-bottom:16px}
+.brand svg{flex:0 0 auto}
+.brand__name{font-family:var(--disp);font-weight:800;font-size:15px;letter-spacing:-.02em;color:#fff}
+.brand__tag{font-family:var(--mono);font-size:9px;letter-spacing:.14em;color:rgba(228,217,190,.55);margin-top:2px}
+
+.nav{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:2px}
+.nav button{
+  all:unset;display:flex;align-items:center;gap:11px;padding:10px 12px;font-family:var(--body);
+  font-size:13.5px;font-weight:500;color:rgba(228,217,190,.75);cursor:pointer;border-left:2px solid transparent;
+}
+.nav button:hover{color:#fff;background:rgba(228,217,190,.06)}
+.nav button.is-active{color:#fff;background:rgba(228,217,190,.1);border-left-color:var(--amber)}
+.nav__dot{width:6px;height:6px;flex:0 0 auto;background:currentColor;opacity:.5;border-radius:1px}
+.nav__badge{margin-left:auto;font-family:var(--mono);font-size:10px;background:var(--clay);color:#fff;padding:1px 6px}
+
+.sidebar__foot{margin-top:auto;padding-top:16px;border-top:1px solid rgba(228,217,190,.14)}
+.zonepill{display:flex;align-items:center;justify-content:space-between;font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;color:rgba(228,217,190,.6);margin-bottom:10px}
+.zonepill b{color:var(--falaj)}
+.admin{display:flex;align-items:center;gap:10px}
+.admin__av{width:32px;height:32px;background:var(--sand);color:var(--fort);font-family:var(--disp);font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+.admin__name{font-size:12.5px;color:#fff;font-weight:600}
+.admin__role{font-family:var(--mono);font-size:10px;color:rgba(228,217,190,.55)}
+
+.main{margin-left:var(--sidebar-w);flex:1;min-width:0}
+.topbar{
+  position:sticky;top:0;z-index:10;background:rgba(251,248,241,.92);backdrop-filter:blur(6px);
+  border-bottom:1px solid var(--line);padding:16px 32px;display:flex;align-items:center;justify-content:space-between;gap:20px;
+}
+.topbar__title{font-size:20px;letter-spacing:-.02em}
+.topbar__sub{font-family:var(--mono);font-size:11px;color:var(--ink-40);letter-spacing:.06em;margin-top:2px}
+.topbar__right{display:flex;align-items:center;gap:14px}
+.search{
+  display:flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--line);padding:8px 12px;min-width:220px;
+}
+.search input{border:0;outline:0;background:none;flex:1;font-size:13px;color:var(--basalt)}
+.iconbtn{width:36px;height:36px;border:1px solid var(--line);background:#fff;display:flex;align-items:center;justify-content:center;font-size:15px;color:var(--ink-60)}
+
+.views{padding:28px 32px 80px}
+.view{display:none}
+.view.is-active{display:block}
+
+/* ===== PRIMITIVES ===== */
+.card{background:#fff;border:1px solid var(--line);padding:20px}
+.grid{display:grid;gap:16px}
+.grid--kpi{grid-template-columns:repeat(5,1fr)}
+.grid--2{grid-template-columns:1.6fr 1fr}
+.grid--3{grid-template-columns:repeat(3,1fr)}
+.grid--4{grid-template-columns:repeat(4,1fr)}
+.section{margin-bottom:32px}
+.section__head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:14px}
+.section__head h3{font-size:15px}
+.section__head .note{font-family:var(--mono);font-size:10.5px;color:var(--ink-40);letter-spacing:.05em}
+.kicker{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-40);display:block;margin-bottom:8px}
+
+.kpi__value{font-family:var(--disp);font-weight:900;font-size:28px;letter-spacing:-.03em;color:var(--fort);margin-top:2px}
+.kpi__trend{font-family:var(--mono);font-size:10.5px;margin-top:6px;display:flex;align-items:center;gap:4px}
+.kpi__trend.up{color:var(--falaj)}
+.kpi__trend.down{color:var(--clay)}
+.sparkline{display:flex;align-items:flex-end;gap:2px;height:24px;margin-top:10px}
+.sparkline i{flex:1;background:var(--sand);display:block}
+.sparkline i.now{background:var(--amber)}
+
+.pill{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;padding:4px 9px;border-radius:99px}
+.pill--neutral{background:var(--sand);color:var(--fort)}
+.pill--success{background:var(--falaj);color:#fff}
+.pill--danger{background:var(--clay);color:#fff}
+.pill--accent{background:var(--amber);color:#fff}
+.pill--dark{background:var(--fort);color:var(--sand)}
+.pill--outline{background:transparent;border:1px solid var(--line);color:var(--ink-60)}
+
+.btn{border:1px solid transparent;padding:9px 16px;font-family:var(--body);font-weight:600;font-size:13px;display:inline-flex;align-items:center;gap:6px}
+.btn--primary{background:var(--fort);color:var(--sand)}
+.btn--secondary{background:var(--sand);color:var(--fort)}
+.btn--ghost{background:transparent;border-color:var(--line);color:var(--fort)}
+.btn--danger{background:var(--clay);color:#fff}
+.btn--sm{padding:6px 11px;font-size:12px}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+
+table{width:100%;border-collapse:collapse}
+th{text-align:left;font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-40);font-weight:500;padding:0 10px 9px 0;border-bottom:1px solid var(--line)}
+td{padding:12px 10px 12px 0;border-bottom:1px solid var(--line-2);vertical-align:middle;font-size:13px}
+tr.row{cursor:pointer}
+tr.row:hover td{background:var(--line-2)}
+.mono{font-family:var(--mono)}
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);margin-bottom:18px}
+.tab{padding:9px 4px;margin-right:18px;font-family:var(--body);font-weight:600;font-size:13px;color:var(--ink-60);border-bottom:2px solid transparent;background:none;border-top:none;border-left:none;border-right:none}
+.tab.is-active{color:var(--fort);border-bottom-color:var(--copper)}
+.filterchips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.chip{border:1px solid var(--line);background:#fff;padding:6px 12px;font-family:var(--mono);font-size:11px;color:var(--ink-60)}
+.chip.is-on{background:var(--fort);border-color:var(--fort);color:var(--sand)}
+
+.falaj{height:2px;background:repeating-linear-gradient(90deg,var(--copper) 0 10px,transparent 10px 18px);margin:18px 0}
+
+/* Overlay: drawer + modal + toast */
+.overlay{position:fixed;inset:0;background:rgba(23,21,15,.35);z-index:40;display:none}
+.overlay.is-open{display:block}
+.drawer{
+  position:fixed;top:0;right:0;bottom:0;width:min(460px,92vw);background:var(--limewash);z-index:41;
+  transform:translateX(100%);transition:transform .25s cubic-bezier(.4,0,.2,1);overflow-y:auto;border-left:1px solid var(--line);
+}
+.drawer.is-open{transform:translateX(0)}
+.drawer__head{padding:20px 22px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:flex-start;background:#fff}
+.drawer__body{padding:22px}
+.drawer__close{all:unset;width:30px;height:30px;display:flex;align-items:center;justify-content:center;border:1px solid var(--line);cursor:pointer;font-size:15px}
+
+.modal{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:min(560px,92vw);max-height:86vh;overflow-y:auto;background:var(--limewash);border:1px solid var(--line);z-index:41;display:none}
+.modal.is-open{display:block}
+.modal__head{padding:18px 22px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;background:#fff}
+.modal__body{padding:22px}
+
+.toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(140%);background:var(--basalt);color:var(--limewash);font-family:var(--mono);font-size:12px;letter-spacing:.05em;padding:11px 20px;transition:transform .28s cubic-bezier(.4,0,.2,1);z-index:99}
+.toast.is-up{transform:translateX(-50%) translateY(0)}
+
+.field{margin-bottom:14px}
+.field label{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-40);margin-bottom:6px}
+.field input,.field select,.field textarea{width:100%;border:1px solid var(--line);padding:9px 11px;background:#fff;color:var(--basalt)}
+.field textarea{resize:vertical;min-height:70px}
+.diffrow{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;padding:8px 0;border-bottom:1px solid var(--line-2);font-size:12.5px}
+.diffrow.changed .new{color:var(--falaj);font-weight:700}
+.diffrow .old{color:var(--ink-40);text-decoration:line-through}
+
+.switch{position:relative;display:inline-block;width:42px;height:24px;flex:0 0 auto}
+.switch input{opacity:0;width:0;height:0}
+.switch .track{position:absolute;inset:0;background:var(--line);transition:.2s;cursor:pointer}
+.switch .knob{position:absolute;height:18px;width:18px;left:3px;top:3px;background:#fff;transition:.2s}
+.switch input:checked + .track{background:var(--falaj)}
+.switch input:checked + .track .knob{transform:translateX(18px)}
+
+.timeline{list-style:none;margin:0;padding:0;border-left:2px solid var(--line);margin-left:6px}
+.timeline li{position:relative;padding:0 0 18px 20px}
+.timeline li::before{content:"";position:absolute;left:-7px;top:2px;width:12px;height:12px;border-radius:50%;background:var(--sand);border:2px solid var(--fort)}
+.timeline li.is-terminal::before{background:var(--falaj)}
+.timeline__label{font-family:var(--disp);font-weight:700;font-size:13px}
+.timeline__meta{font-family:var(--mono);font-size:11px;color:var(--ink-60);margin-top:2px}
+
+.bars{display:flex;align-items:flex-end;gap:10px;height:150px;padding-top:10px}
+.bars .bar{flex:1;display:flex;flex-direction:column;align-items:center;gap:8px}
+.bars .bar .track{width:100%;height:110px;display:flex;align-items:flex-end}
+.bars .bar b{width:100%;display:block;background:var(--fort)}
+.bars .bar span{font-family:var(--mono);font-size:9.5px;color:var(--ink-40)}
+
+.empty{text-align:center;padding:40px 20px;color:var(--ink-40);font-family:var(--mono);font-size:12px}
+
+@media (max-width:1180px){
+  .grid--kpi{grid-template-columns:repeat(3,1fr)}
+  .grid--2{grid-template-columns:1fr}
+}
+@media (max-width:860px){
+  .sidebar{position:static;width:100%;height:auto}
+  .main{margin-left:0}
+  .grid--kpi,.grid--3,.grid--4{grid-template-columns:1fr 1fr}
+  .views{padding:20px}
+}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="mark" viewBox="0 0 100 124">
+    <path fill-rule="evenodd" d="
+      M18 14 H26 V22 H32 V14 H40 V22 H46 V14 H54 V22 H60 V14 H68 V22 H74 V14 H82
+      V62 C82 82 68 96 50 118 C32 96 18 82 18 62 Z
+      M38 88 L38 60 Q38 46 50 40 Q62 46 62 60 L62 88 Z"/>
+  </symbol>
+</svg>
+
+<div class="app">
+  <!-- ============ SIDEBAR ============ -->
+  <aside class="sidebar">
+    <div class="brand">
+      <svg width="26" height="32" viewBox="0 0 100 124"><use href="#mark" fill="#E4D9BE"/></svg>
+      <div>
+        <div class="brand__name">NIZWA TAXI</div>
+        <div class="brand__tag">COMMAND CENTRE</div>
+      </div>
+    </div>
+    <ul class="nav" id="nav">
+      <li><button data-view="overview" class="is-active"><span class="nav__dot"></span>Overview</button></li>
+      <li><button data-view="drivers"><span class="nav__dot"></span>Drivers<span class="nav__badge" id="navBadgeDrivers">3</span></button></li>
+      <li><button data-view="rides"><span class="nav__dot"></span>Rides</button></li>
+      <li><button data-view="pricing"><span class="nav__dot"></span>Pricing rules</button></li>
+      <li><button data-view="zones"><span class="nav__dot"></span>Zones</button></li>
+      <li><button data-view="finance"><span class="nav__dot"></span>Finance</button></li>
+      <li><button data-view="support"><span class="nav__dot"></span>Support<span class="nav__badge" id="navBadgeSupport">2</span></button></li>
+    </ul>
+    <div class="sidebar__foot">
+      <div class="zonepill"><span>NIZWA CORE</span><b id="sidebarZoneStatus">● OPEN</b></div>
+      <div class="admin">
+        <div class="admin__av">A</div>
+        <div>
+          <div class="admin__name">Amira Al Balushi</div>
+          <div class="admin__role">Operations · Admin</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ============ MAIN ============ -->
+  <main class="main">
+    <header class="topbar">
+      <div>
+        <div class="topbar__title" id="pageTitle">Operations overview</div>
+        <div class="topbar__sub" id="pageSub">Tuesday, 27 July 2026 · Asia/Muscat</div>
+      </div>
+      <div class="topbar__right">
+        <div class="search"><span>⌕</span><input placeholder="Search rides, drivers, tickets…" id="globalSearch"></div>
+        <button class="iconbtn" title="Audit log">☰</button>
+        <button class="iconbtn" title="Notifications">🔔</button>
+      </div>
+    </header>
+
+    <div class="views">
+
+      <!-- ============ OVERVIEW ============ -->
+      <section class="view is-active" data-view="overview">
+        <div class="grid grid--kpi section">
+          <div class="card">
+            <span class="kicker">Active rides</span>
+            <div class="kpi__value" id="kpiActiveRides">7</div>
+            <div class="kpi__trend up">▲ 12% vs yesterday</div>
+          </div>
+          <div class="card">
+            <span class="kicker">Drivers online</span>
+            <div class="kpi__value">34</div>
+            <div class="sparkline" id="sparkDrivers"></div>
+          </div>
+          <div class="card">
+            <span class="kicker">Rides today</span>
+            <div class="kpi__value">186</div>
+            <div class="kpi__trend up">▲ 6% vs Tue avg</div>
+          </div>
+          <div class="card">
+            <span class="kicker">Median ETA</span>
+            <div class="kpi__value">4.2<span style="font-size:14px">m</span></div>
+            <div class="kpi__trend down">▼ 0.4m — improving</div>
+          </div>
+          <div class="card">
+            <span class="kicker">Unassigned requests</span>
+            <div class="kpi__value" style="color:var(--clay)">2</div>
+            <div class="kpi__trend" style="color:var(--ink-60)">Radius expanded to 6km</div>
+          </div>
+        </div>
+
+        <div class="grid grid--2 section">
+          <div class="card">
+            <div class="section__head"><h3>Live fleet — Nizwa Core</h3><span class="note">34 online · updated 4s ago</span></div>
+            <svg viewBox="0 0 520 300" style="width:100%;height:auto;background:var(--sand)">
+              <g opacity="0.5">
+                <path d="M0 0H520V300H0Z" fill="none"/>
+                <path d="M60 40 L460 40 L460 260 L60 260 Z" fill="none" stroke="#0B3226" stroke-width="2" stroke-dasharray="6 6" opacity=".35"/>
+              </g>
+              <g stroke="#0B3226" stroke-opacity=".08">
+                <line x1="0" y1="60" x2="520" y2="60"/><line x1="0" y1="120" x2="520" y2="120"/>
+                <line x1="0" y1="180" x2="520" y2="180"/><line x1="0" y1="240" x2="520" y2="240"/>
+                <line x1="130" y1="0" x2="130" y2="300"/><line x1="260" y1="0" x2="260" y2="300"/><line x1="390" y1="0" x2="390" y2="300"/>
+              </g>
+              <text x="66" y="34" font-family="IBM Plex Mono" font-size="10" fill="#0B3226" opacity=".55">NIZWA CORE ZONE</text>
+              <g id="fleetDots"></g>
+            </svg>
+            <div style="display:flex;gap:16px;margin-top:12px;font-family:var(--mono);font-size:10.5px;color:var(--ink-60)">
+              <span>● <span style="color:var(--falaj)">■</span> On trip</span>
+              <span><span style="color:var(--fort)">■</span> Idle, online</span>
+              <span><span style="color:var(--amber)">■</span> Offer pending</span>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="section__head"><h3>Recent activity</h3></div>
+            <ul class="timeline" id="activityFeed"></ul>
+          </div>
+        </div>
+
+        <div class="card section">
+          <div class="section__head"><h3>Document expiry — next 14 days</h3><span class="note">Auto-suspends at 00:00 Oman time on expiry</span></div>
+          <table>
+            <thead><tr><th>Driver</th><th>Document</th><th>Expires</th><th>Days left</th><th>Status</th></tr></thead>
+            <tbody id="expiryTable"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ============ DRIVERS ============ -->
+      <section class="view" data-view="drivers">
+        <div class="tabs" id="driverTabs">
+          <button class="tab is-active" data-subtab="queue">Verification queue</button>
+          <button class="tab" data-subtab="expiry">Document expiry board</button>
+          <button class="tab" data-subtab="all">All drivers</button>
+        </div>
+
+        <div class="subview" data-subtab="queue">
+          <div class="card">
+            <table>
+              <thead><tr><th>Applicant</th><th>Applied</th><th>Vehicle</th><th>Documents</th><th>Status</th><th></th></tr></thead>
+              <tbody id="verificationTable"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="subview" data-subtab="expiry" style="display:none">
+          <div class="card">
+            <table>
+              <thead><tr><th>Driver</th><th>Document</th><th>Expires</th><th>Days left</th><th>Status</th></tr></thead>
+              <tbody id="expiryTable2"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="subview" data-subtab="all" style="display:none">
+          <div class="filterchips" id="driverFilterChips">
+            <button class="chip is-on" data-filter="all">All</button>
+            <button class="chip" data-filter="approved">Approved</button>
+            <button class="chip" data-filter="suspended">Suspended</button>
+            <button class="chip" data-filter="pending">Pending</button>
+          </div>
+          <div class="card">
+            <table>
+              <thead><tr><th>Driver</th><th>Plate</th><th>Rating</th><th>Trips</th><th>Status</th></tr></thead>
+              <tbody id="allDriversTable"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ RIDES ============ -->
+      <section class="view" data-view="rides">
+        <div class="filterchips" id="rideFilterChips">
+          <button class="chip is-on" data-filter="all">All</button>
+          <button class="chip" data-filter="REQUESTED">Requested</button>
+          <button class="chip" data-filter="ACCEPTED">Accepted</button>
+          <button class="chip" data-filter="IN_PROGRESS">In progress</button>
+          <button class="chip" data-filter="COMPLETED">Completed</button>
+          <button class="chip" data-filter="CANCELLED">Cancelled</button>
+        </div>
+        <div class="card">
+          <table>
+            <thead><tr><th>Ride</th><th>Passenger</th><th>Driver</th><th>Zone</th><th>Fare</th><th>Status</th><th>Requested</th></tr></thead>
+            <tbody id="ridesTable"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ============ PRICING ============ -->
+      <section class="view" data-view="pricing">
+        <div class="section__head"><h3>Active pricing rules</h3><span class="note">Never edited in place — a change creates a new version</span></div>
+        <div class="grid grid--3 section" id="pricingCards"></div>
+        <div class="section__head"><h3>Version history</h3></div>
+        <div class="card"><table><thead><tr><th>Rule ID</th><th>Zone / type</th><th>Base</th><th>Per km</th><th>Active from</th><th>Active to</th><th>Status</th></tr></thead><tbody id="pricingHistoryTable"></tbody></table></div>
+      </section>
+
+      <!-- ============ ZONES ============ -->
+      <section class="view" data-view="zones">
+        <div class="grid grid--3" id="zoneCards"></div>
+      </section>
+
+      <!-- ============ FINANCE ============ -->
+      <section class="view" data-view="finance">
+        <div class="grid grid--4 section">
+          <div class="card"><span class="kicker">GMV (this month)</span><div class="kpi__value">18,420 <span style="font-size:13px">OMR</span></div></div>
+          <div class="card"><span class="kicker">Commission earned</span><div class="kpi__value">2,763 <span style="font-size:13px">OMR</span></div></div>
+          <div class="card"><span class="kicker">Cash owed to platform</span><div class="kpi__value" style="color:var(--clay)">1,208 <span style="font-size:13px">OMR</span></div></div>
+          <div class="card"><span class="kicker">Refunds issued</span><div class="kpi__value">64 <span style="font-size:13px">OMR</span></div></div>
+        </div>
+        <div class="card section">
+          <div class="section__head"><h3>GMV — last 7 days</h3><span class="note">OMR</span></div>
+          <div class="bars" id="gmvBars"></div>
+        </div>
+        <div class="card">
+          <div class="section__head"><h3>Driver settlements</h3></div>
+          <table>
+            <thead><tr><th>Driver</th><th>Period</th><th>Trips</th><th>Commission owed</th><th>Status</th><th></th></tr></thead>
+            <tbody id="settlementsTable"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ============ SUPPORT ============ -->
+      <section class="view" data-view="support">
+        <div class="card">
+          <table>
+            <thead><tr><th>Ticket</th><th>From</th><th>Subject</th><th>Priority</th><th>Status</th><th>Assigned</th></tr></thead>
+            <tbody id="ticketsTable"></tbody>
+          </table>
+        </div>
+      </section>
+
+    </div>
+  </main>
+</div>
+
+<!-- ============ OVERLAY / DRAWER / MODAL / TOAST ============ -->
+<div class="overlay" id="overlay"></div>
+<aside class="drawer" id="drawer">
+  <div class="drawer__head">
+    <div>
+      <div class="kicker" id="drawerKicker">Detail</div>
+      <h3 id="drawerTitle">—</h3>
+    </div>
+    <button class="drawer__close" id="drawerClose">✕</button>
+  </div>
+  <div class="drawer__body" id="drawerBody"></div>
+</aside>
+
+<div class="modal" id="modal">
+  <div class="modal__head">
+    <h3 id="modalTitle">New pricing version</h3>
+    <button class="drawer__close" id="modalClose">✕</button>
+  </div>
+  <div class="modal__body" id="modalBody"></div>
+</div>
+
+<div class="toast" id="toast">Saved</div>
+
+<script>
+(function(){
+"use strict";
+
+/* ================= MOCK DATA ================= */
+const DRIVERS = [
+  {id:"NZ-0142", name:"Salim Al Amri", plate:"1234 AB", rating:4.9, trips:812, status:"approved", vehicle:"Toyota Camry"},
+  {id:"NZ-0187", name:"Yousuf Al Rawahi", plate:"5521 CD", rating:4.7, trips:530, status:"approved", vehicle:"Nissan Sunny"},
+  {id:"NZ-0203", name:"Khalid Al Kindi", plate:"9012 EF", rating:4.8, trips:1210, status:"approved", vehicle:"Toyota Corolla"},
+  {id:"NZ-0240", name:"Marwan Al Hinai", plate:"3345 GH", rating:0, trips:0, status:"pending", vehicle:"Hyundai Elantra"},
+  {id:"NZ-0251", name:"Said Al Busaidi", plate:"7788 IJ", rating:4.4, trips:64, status:"pending", vehicle:"Kia Cerato"},
+  {id:"NZ-0098", name:"Ahmed Al Habsi", plate:"2200 KL", rating:4.1, trips:322, status:"suspended", vehicle:"Toyota Yaris"},
+];
+
+const VERIFICATION_QUEUE = [
+  {driver:"Marwan Al Hinai", id:"NZ-0240", applied:"2026-07-25", vehicle:"Hyundai Elantra · 2022", docs:{license:"verified", vehicleReg:"pending", insurance:"pending"}},
+  {driver:"Said Al Busaidi", id:"NZ-0251", applied:"2026-07-24", vehicle:"Kia Cerato · 2021", docs:{license:"pending", vehicleReg:"verified", insurance:"verified"}},
+  {driver:"Fatma Al Zadjali", id:"NZ-0260", applied:"2026-07-27", vehicle:"Toyota Corolla · 2023", docs:{license:"verified", vehicleReg:"verified", insurance:"pending"}},
+];
+
+const DOC_EXPIRY = [
+  {driver:"Ahmed Al Habsi", id:"NZ-0098", doc:"Driving licence", expires:"2026-07-28", days:1},
+  {driver:"Khalid Al Kindi", id:"NZ-0203", doc:"Vehicle insurance", expires:"2026-08-03", days:7},
+  {driver:"Yousuf Al Rawahi", id:"NZ-0187", doc:"Vehicle registration", expires:"2026-08-10", days:14},
+  {driver:"Salim Al Amri", id:"NZ-0142", doc:"Driving licence", expires:"2026-08-24", days:28},
+];
+
+function expiryTone(days){
+  if(days <= 3) return {pill:"pill--danger", label:"Expiring — auto-suspend"};
+  if(days <= 14) return {pill:"pill--accent", label:"Renew soon"};
+  return {pill:"pill--neutral", label:"OK"};
+}
+
+const RIDES = [
+  {id:"NZ-04182", passenger:"H. Al Maskari", driver:"Salim Al Amri", zone:"Nizwa Core", fare:"2.150 OMR", status:"IN_PROGRESS", requested:"07:42"},
+  {id:"NZ-04181", passenger:"R. Al Siyabi", driver:"Khalid Al Kindi", zone:"Nizwa Core", fare:"1.780 OMR", status:"COMPLETED", requested:"07:20"},
+  {id:"NZ-04180", passenger:"M. Al Farsi", driver:"—", zone:"Nizwa Core", fare:"—", status:"REQUESTED", requested:"07:44"},
+  {id:"NZ-04179", passenger:"S. Al Balushi", driver:"Yousuf Al Rawahi", zone:"Nizwa Core", fare:"3.200 OMR", status:"ACCEPTED", requested:"07:39"},
+  {id:"NZ-04178", passenger:"A. Al Harthy", driver:"Ahmed Al Habsi", zone:"Nizwa Core", fare:"0.950 OMR", status:"CANCELLED", requested:"06:58"},
+  {id:"NZ-04177", passenger:"N. Al Amri", driver:"Salim Al Amri", zone:"Nizwa Core", fare:"1.420 OMR", status:"COMPLETED", requested:"06:40"},
+];
+
+const RIDE_HISTORY = {
+  "NZ-04182":[
+    {label:"Requested", actor:"Passenger · H. Al Maskari", time:"07:42:03", extra:"Zone resolved: Nizwa Core"},
+    {label:"Accepted", actor:"Driver · Salim Al Amri", time:"07:42:19", extra:"Offer #1 — accepted in 12s"},
+    {label:"Arrived", actor:"Driver · Salim Al Amri", time:"07:46:02", extra:"GPS 22.9345, 57.5297"},
+    {label:"In progress", actor:"Driver · Salim Al Amri", time:"07:47:40", extra:"Trip started"},
+  ]
+};
+
+const PRICING_RULES = [
+  {id:"PR-2026-014", zone:"Nizwa Core", type:"Standard", base:"0.500", perKm:"0.150", perMin:"0.030", minFare:"1.200", from:"2026-06-01"},
+  {id:"PR-2026-015", zone:"Nizwa Core", type:"Comfort · Van", base:"0.800", perKm:"0.220", perMin:"0.040", minFare:"1.800", from:"2026-06-01"},
+  {id:"PR-2026-011", zone:"Bahla (inactive)", type:"Standard", base:"0.500", perKm:"0.150", perMin:"0.030", minFare:"1.200", from:"2026-05-01"},
+];
+
+const PRICING_HISTORY = [
+  {id:"PR-2026-014", zoneType:"Nizwa Core · Standard", base:"0.500", perKm:"0.150", from:"2026-06-01", to:"—", status:"Active"},
+  {id:"PR-2026-009", zoneType:"Nizwa Core · Standard", base:"0.450", perKm:"0.140", from:"2026-03-01", to:"2026-05-31", status:"Superseded"},
+  {id:"PR-2026-002", zoneType:"Nizwa Core · Standard", base:"0.450", perKm:"0.130", from:"2026-01-01", to:"2026-02-28", status:"Superseded"},
+];
+
+const ZONES = [
+  {name:"Nizwa Core", nameAr:"نزوى", status:"open", note:"Launch zone — point-to-point + scheduled rides"},
+  {name:"Bahla", nameAr:"بهلاء", status:"closed", note:"Polygon staged, pricing staged — launch pending"},
+  {name:"Al Hamra", nameAr:"الحمراء", status:"closed", note:"Polygon staged, pricing staged — launch pending"},
+];
+
+const SETTLEMENTS = [
+  {driver:"Salim Al Amri", period:"18–24 Jul", trips:54, owed:"17.760 OMR", status:"pending"},
+  {driver:"Khalid Al Kindi", period:"18–24 Jul", trips:61, owed:"19.400 OMR", status:"paid"},
+  {driver:"Yousuf Al Rawahi", period:"18–24 Jul", trips:38, owed:"11.020 OMR", status:"pending"},
+];
+
+const TICKETS = [
+  {id:"TK-1042", from:"Passenger · R. Al Siyabi", subject:"Driver took a longer route", priority:"medium", status:"open", assigned:"—"},
+  {id:"TK-1041", from:"Driver · Ahmed Al Habsi", subject:"Document upload failing", priority:"high", status:"pending", assigned:"Amira"},
+  {id:"TK-1039", from:"Passenger · M. Al Farsi", subject:"Lost item in vehicle", priority:"low", status:"resolved", assigned:"Fahad"},
+];
+
+const ACTIVITY = [
+  {label:"Ride NZ-04182 in progress", meta:"07:47 · Salim Al Amri → H. Al Maskari", terminal:false},
+  {label:"Driver NZ-0142 went online", meta:"07:30 · Nizwa Core", terminal:false},
+  {label:"Ride NZ-04181 completed", meta:"07:33 · 1.780 OMR · cash", terminal:true},
+  {label:"Document expiry warning sent", meta:"07:00 · Ahmed Al Habsi · licence, 1 day left", terminal:false},
+  {label:"Ride NZ-04178 cancelled by admin", meta:"06:59 · reason: driver_no_show", terminal:true},
+];
+
+/* ================= HELPERS ================= */
+function statusPillClass(status){
+  return {
+    REQUESTED:"pill--neutral", ACCEPTED:"pill--accent", ARRIVED:"pill--accent",
+    IN_PROGRESS:"pill--success", COMPLETED:"pill--dark", CANCELLED:"pill--danger", EXPIRED:"pill--danger",
+    approved:"pill--success", pending:"pill--accent", suspended:"pill--danger",
+    open:"pill--success", closed:"pill--neutral", paid:"pill--success",
+    resolved:"pill--success", high:"pill--danger", medium:"pill--accent", low:"pill--neutral",
+  }[status] || "pill--neutral";
+}
+function pill(label, status){ return '<span class="pill ' + statusPillClass(status) + '">' + label + '</span>'; }
+function esc(s){ return String(s).replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c])); }
+
+let toastTimer;
+function toast(msg){
+  const el = document.getElementById('toast');
+  el.textContent = msg; el.classList.add('is-up');
+  clearTimeout(toastTimer); toastTimer = setTimeout(()=> el.classList.remove('is-up'), 2200);
+}
+
+/* ================= NAVIGATION ================= */
+const navButtons = document.querySelectorAll('#nav button');
+const views = document.querySelectorAll('.view');
+const pageTitle = document.getElementById('pageTitle');
+const TITLES = {
+  overview:["Operations overview","Tuesday, 27 July 2026 · Asia/Muscat"],
+  drivers:["Drivers","Verification, documents and fleet roster"],
+  rides:["Rides","Live and historical trips across Nizwa Core"],
+  pricing:["Pricing rules","Versioned tariffs — never edited in place"],
+  zones:["Zones","Service area coverage and launch status"],
+  finance:["Finance","GMV, commission, settlements and refunds"],
+  support:["Support","Passenger and driver ticket queue"],
+};
+navButtons.forEach(btn => btn.addEventListener('click', () => {
+  navButtons.forEach(b => b.classList.remove('is-active'));
+  btn.classList.add('is-active');
+  const target = btn.dataset.view;
+  views.forEach(v => v.classList.toggle('is-active', v.dataset.view === target));
+  pageTitle.textContent = TITLES[target][0];
+  document.getElementById('pageSub').textContent = TITLES[target][1];
+}));
+
+/* ================= OVERVIEW ================= */
+(function renderOverview(){
+  const spark = document.getElementById('sparkDrivers');
+  [14,18,16,22,20,26,24,30,28,34].forEach((v,i,arr)=>{
+    const bar = document.createElement('i');
+    bar.style.height = (20 + (v/Math.max(...arr))*80) + '%';
+    if(i === arr.length-1) bar.classList.add('now');
+    spark.appendChild(bar);
+  });
+
+  const dots = document.getElementById('fleetDots');
+  const positions = [[110,90,'#0B3226'],[180,150,'#2E7D5B'],[240,80,'#0B3226'],[300,190,'#E8892B'],
+    [340,110,'#0B3226'],[400,160,'#2E7D5B'],[150,210,'#0B3226'],[260,140,'#0B3226'],[420,90,'#0B3226']];
+  positions.forEach(([x,y,c])=>{
+    dots.innerHTML += '<circle cx="'+x+'" cy="'+y+'" r="5" fill="'+c+'" stroke="#fff" stroke-width="1.5"/>';
+  });
+
+  const feed = document.getElementById('activityFeed');
+  feed.innerHTML = ACTIVITY.map(a => (
+    '<li class="'+(a.terminal?'is-terminal':'')+'">' +
+      '<div class="timeline__label">'+esc(a.label)+'</div>' +
+      '<div class="timeline__meta">'+esc(a.meta)+'</div>' +
+    '</li>'
+  )).join('');
+
+  const rows = DOC_EXPIRY.map(d => {
+    const tone = expiryTone(d.days);
+    return '<tr><td>'+esc(d.driver)+' <span class="mono" style="color:var(--ink-40)">· '+d.id+'</span></td><td>'+d.doc+'</td><td class="mono">'+d.expires+'</td><td class="mono">'+d.days+'d</td><td>'+pill(tone.label, tone.pill.replace('pill--',''))+'</td></tr>';
+  }).join('');
+  document.getElementById('expiryTable').innerHTML = rows;
+  document.getElementById('expiryTable2').innerHTML = rows;
+})();
+
+/* ================= DRIVERS ================= */
+document.querySelectorAll('#driverTabs .tab').forEach(tab => tab.addEventListener('click', () => {
+  document.querySelectorAll('#driverTabs .tab').forEach(t => t.classList.remove('is-active'));
+  tab.classList.add('is-active');
+  document.querySelectorAll('[data-view="drivers"] .subview').forEach(s => {
+    s.style.display = s.dataset.subtab === tab.dataset.subtab ? '' : 'none';
+  });
+}));
+
+function docChip(status){
+  const label = {verified:'Verified', pending:'Pending', rejected:'Rejected'}[status];
+  const tone = status === 'verified' ? 'success' : status === 'rejected' ? 'danger' : 'accent';
+  return '<span class="pill pill--'+tone+'" style="margin-right:4px">'+label+'</span>';
+}
+
+function renderVerificationQueue(){
+  document.getElementById('verificationTable').innerHTML = VERIFICATION_QUEUE.map((v,i) => (
+    '<tr class="row" data-open-driver="'+i+'">' +
+      '<td><b>'+esc(v.driver)+'</b><br><span class="mono" style="color:var(--ink-40);font-size:11px">'+v.id+'</span></td>' +
+      '<td class="mono">'+v.applied+'</td>' +
+      '<td>'+v.vehicle+'</td>' +
+      '<td>'+docChip(v.docs.license)+docChip(v.docs.vehicleReg)+docChip(v.docs.insurance)+'</td>' +
+      '<td>'+pill('Pending review','pending')+'</td>' +
+      '<td><button class="btn btn--ghost btn--sm" data-open-driver="'+i+'">Review →</button></td>' +
+    '</tr>'
+  )).join('');
+  document.getElementById('navBadgeDrivers').textContent = VERIFICATION_QUEUE.length;
+}
+renderVerificationQueue();
+
+document.getElementById('verificationTable').addEventListener('click', e => {
+  const target = e.target.closest('[data-open-driver]');
+  if(!target) return;
+  openDriverDrawer(VERIFICATION_QUEUE[+target.dataset.openDriver]);
+});
+
+function openDriverDrawer(applicant){
+  document.getElementById('drawerKicker').textContent = 'Driver verification · ' + applicant.id;
+  document.getElementById('drawerTitle').textContent = applicant.driver;
+  document.getElementById('drawerBody').innerHTML =
+    '<div class="section">' +
+      '<span class="kicker">Vehicle</span><p>'+esc(applicant.vehicle)+'</p>' +
+    '</div>' +
+    '<div class="section">' +
+      '<span class="kicker">Documents</span>' +
+      Object.entries(applicant.docs).map(([k,v]) => (
+        '<div class="card" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">' +
+          '<span style="font-family:var(--mono);font-size:12px;text-transform:capitalize">'+k.replace(/([A-Z])/g,' $1')+'</span>' + docChip(v) +
+        '</div>'
+      )).join('') +
+    '</div>' +
+    '<div class="field"><label>Reason (required to reject)</label><textarea placeholder="e.g. Vehicle registration photo is illegible"></textarea></div>' +
+    '<div style="display:flex;gap:10px">' +
+      '<button class="btn btn--primary" id="approveBtn">Approve driver</button>' +
+      '<button class="btn btn--danger" id="rejectBtn">Reject</button>' +
+    '</div>' +
+    '<p class="note" style="margin-top:14px;font-family:var(--mono);font-size:10.5px;color:var(--ink-40)">This action writes an audit_logs row with your admin ID and the reason above.</p>';
+
+  document.getElementById('approveBtn').onclick = () => { closeOverlays(); toast('Driver ' + applicant.id + ' approved · audit log written'); };
+  document.getElementById('rejectBtn').onclick = () => { closeOverlays(); toast('Driver ' + applicant.id + ' rejected · audit log written'); };
+  openDrawer();
+}
+
+function renderAllDrivers(filter){
+  filter = filter || 'all';
+  const rows = DRIVERS.filter(d => filter === 'all' || d.status === filter).map(d => (
+    '<tr><td><b>'+esc(d.name)+'</b><br><span class="mono" style="color:var(--ink-40);font-size:11px">'+d.id+'</span></td>' +
+    '<td class="mono">'+d.plate+'</td><td>'+(d.rating ? '★ '+d.rating.toFixed(1) : '—')+'</td><td class="mono">'+d.trips+'</td>' +
+    '<td>'+pill(d.status[0].toUpperCase()+d.status.slice(1), d.status)+'</td></tr>'
+  )).join('') || '<tr><td colspan="5" class="empty">No drivers match this filter.</td></tr>';
+  document.getElementById('allDriversTable').innerHTML = rows;
+}
+renderAllDrivers();
+document.getElementById('driverFilterChips').addEventListener('click', e => {
+  const chip = e.target.closest('.chip'); if(!chip) return;
+  document.querySelectorAll('#driverFilterChips .chip').forEach(c => c.classList.remove('is-on'));
+  chip.classList.add('is-on');
+  renderAllDrivers(chip.dataset.filter);
+});
+
+/* ================= RIDES ================= */
+function renderRides(filter){
+  filter = filter || 'all';
+  const rows = RIDES.filter(r => filter === 'all' || r.status === filter).map(r => (
+    '<tr class="row" data-ride="'+r.id+'">' +
+      '<td class="mono">'+r.id+'</td><td>'+esc(r.passenger)+'</td><td>'+esc(r.driver)+'</td><td>'+r.zone+'</td>' +
+      '<td class="mono">'+r.fare+'</td><td>'+pill(r.status.replace('_',' '), r.status)+'</td><td class="mono">'+r.requested+'</td>' +
+    '</tr>'
+  )).join('') || '<tr><td colspan="7" class="empty">No rides match this filter.</td></tr>';
+  document.getElementById('ridesTable').innerHTML = rows;
+}
+renderRides();
+document.getElementById('rideFilterChips').addEventListener('click', e => {
+  const chip = e.target.closest('.chip'); if(!chip) return;
+  document.querySelectorAll('#rideFilterChips .chip').forEach(c => c.classList.remove('is-on'));
+  chip.classList.add('is-on');
+  renderRides(chip.dataset.filter);
+});
+document.getElementById('ridesTable').addEventListener('click', e => {
+  const row = e.target.closest('[data-ride]'); if(!row) return;
+  const ride = RIDES.find(r => r.id === row.dataset.ride);
+  openRideDrawer(ride);
+});
+
+function openRideDrawer(ride){
+  document.getElementById('drawerKicker').textContent = 'Ride · ' + ride.zone;
+  document.getElementById('drawerTitle').textContent = ride.id;
+  const history = RIDE_HISTORY[ride.id] || [
+    {label:"Requested", actor:"Passenger · "+ride.passenger, time:ride.requested+":00", extra:"Zone resolved: "+ride.zone}
+  ];
+  document.getElementById('drawerBody').innerHTML =
+    '<div class="section">' +
+      '<div style="display:flex;gap:20px">' +
+        '<div><span class="kicker">Passenger</span><p>'+esc(ride.passenger)+'</p></div>' +
+        '<div><span class="kicker">Driver</span><p>'+esc(ride.driver)+'</p></div>' +
+        '<div><span class="kicker">Fare</span><p class="mono">'+ride.fare+'</p></div>' +
+      '</div>' +
+    '</div>' +
+    '<div class="section"><span class="kicker">Status history <span style="text-transform:none;color:var(--ink-40)">(append-only)</span></span>' +
+      '<ul class="timeline">' + history.map((h,i) => (
+        '<li class="'+(i===history.length-1?'is-terminal':'')+'">' +
+          '<div class="timeline__label">'+h.label+'</div>' +
+          '<div class="timeline__meta">'+h.time+' · '+h.actor+'<br>'+h.extra+'</div>' +
+        '</li>'
+      )).join('') + '</ul>' +
+    '</div>' +
+    '<div class="section">' +
+      '<span class="kicker">Manual intervention</span>' +
+      '<div class="field"><label>Reason code</label><select id="reasonCode">' +
+        '<option>rider_no_show</option><option>driver_no_show</option><option>safety_concern</option><option>duplicate_request</option><option>other</option>' +
+      '</select></div>' +
+      '<button class="btn btn--danger" id="cancelRideBtn">Cancel ride with reason</button>' +
+      '<p class="note" style="margin-top:12px;font-family:var(--mono);font-size:10.5px;color:var(--ink-40)">Writes a new ride_status_history row and an audit_logs entry — history is never edited or deleted.</p>' +
+    '</div>';
+  document.getElementById('cancelRideBtn').onclick = () => {
+    const reason = document.getElementById('reasonCode').value;
+    closeOverlays();
+    toast('Ride ' + ride.id + ' cancelled · reason: ' + reason);
+  };
+  openDrawer();
+}
+
+/* ================= PRICING ================= */
+function renderPricingCards(){
+  document.getElementById('pricingCards').innerHTML = PRICING_RULES.map(p => (
+    '<div class="card">' +
+      '<span class="kicker">'+p.zone+' · '+p.type+'</span>' +
+      '<div class="mono" style="font-size:11px;color:var(--ink-40);margin-bottom:10px">'+p.id+' · active '+p.from+'</div>' +
+      '<div class="diffrow" style="grid-template-columns:1fr 1fr"><span>Base fare</span><b>'+p.base+' OMR</b></div>' +
+      '<div class="diffrow" style="grid-template-columns:1fr 1fr"><span>Per km</span><b>'+p.perKm+' OMR</b></div>' +
+      '<div class="diffrow" style="grid-template-columns:1fr 1fr"><span>Per min</span><b>'+p.perMin+' OMR</b></div>' +
+      '<div class="diffrow" style="grid-template-columns:1fr 1fr"><span>Minimum fare</span><b>'+p.minFare+' OMR</b></div>' +
+      '<button class="btn btn--ghost btn--sm" style="margin-top:12px" data-new-version=\''+JSON.stringify(p)+'\'>+ New version</button>' +
+    '</div>'
+  )).join('');
+  document.getElementById('pricingHistoryTable').innerHTML = PRICING_HISTORY.map(h => (
+    '<tr><td class="mono">'+h.id+'</td><td>'+h.zoneType+'</td><td class="mono">'+h.base+'</td><td class="mono">'+h.perKm+'</td>' +
+    '<td class="mono">'+h.from+'</td><td class="mono">'+h.to+'</td><td>'+pill(h.status, h.status==='Active'?'success':'neutral')+'</td></tr>'
+  )).join('');
+}
+renderPricingCards();
+
+document.getElementById('pricingCards').addEventListener('click', e => {
+  const btn = e.target.closest('[data-new-version]'); if(!btn) return;
+  const current = JSON.parse(btn.dataset.newVersion);
+  openNewVersionModal(current);
+});
+
+function openNewVersionModal(current){
+  document.getElementById('modalTitle').textContent = 'New pricing version — ' + current.zone + ' · ' + current.type;
+  document.getElementById('modalBody').innerHTML =
+    '<p class="note" style="font-family:var(--mono);font-size:11px;color:var(--ink-40);margin-bottom:16px">Editing creates PR-2026-0'+Math.floor(Math.random()*90+10)+'. '+current.id+' gets active_to = today and is superseded — its rate columns are never changed.</p>' +
+    '<div class="field"><label>Base fare (OMR)</label><input id="fBase" value="'+current.base+'"></div>' +
+    '<div class="field"><label>Per km (OMR)</label><input id="fPerKm" value="'+current.perKm+'"></div>' +
+    '<div class="field"><label>Per min (OMR)</label><input id="fPerMin" value="'+current.perMin+'"></div>' +
+    '<div class="field"><label>Minimum fare (OMR)</label><input id="fMinFare" value="'+current.minFare+'"></div>' +
+    '<div id="diffPreview"></div>' +
+    '<button class="btn btn--primary" id="previewDiffBtn">Preview diff</button>' +
+    '<button class="btn btn--secondary" id="confirmVersionBtn" style="display:none;margin-left:8px">Confirm new version</button>';
+
+  document.getElementById('previewDiffBtn').onclick = () => {
+    const next = {base:val('fBase'), perKm:val('fPerKm'), perMin:val('fPerMin'), minFare:val('fMinFare')};
+    const rows = [['Base fare','base'],['Per km','perKm'],['Per min','perMin'],['Minimum fare','minFare']].map(([label,key]) => {
+      const changed = next[key] !== current[key];
+      return '<div class="diffrow '+(changed?'changed':'')+'"><span>'+label+'</span><span class="old">'+current[key]+'</span><span class="new">'+next[key]+'</span></div>';
+    }).join('');
+    document.getElementById('diffPreview').innerHTML =
+      '<div class="falaj"></div><div class="diffrow" style="font-family:var(--mono);font-size:10px;color:var(--ink-40);text-transform:uppercase"><span>Field</span><span>Current</span><span>New</span></div>' + rows;
+    document.getElementById('confirmVersionBtn').style.display = '';
+  };
+  document.getElementById('confirmVersionBtn').onclick = () => {
+    closeOverlays();
+    toast('New pricing version created · ' + current.id + ' superseded');
+  };
+  function val(id){ return document.getElementById(id).value; }
+  openModal();
+}
+
+/* ================= ZONES ================= */
+function renderZones(){
+  document.getElementById('zoneCards').innerHTML = ZONES.map((z,i) => (
+    '<div class="card">' +
+      '<svg viewBox="0 0 200 120" style="width:100%;height:auto;background:var(--sand);margin-bottom:12px">' +
+        '<path d="M20 20 L180 20 L180 100 L20 100 Z" fill="none" stroke="#0B3226" stroke-width="2" stroke-dasharray="'+(z.status==='open'?'0':'5 5')+'" opacity="'+(z.status==='open'?'0.7':'0.35')+'"/>' +
+      '</svg>' +
+      '<div style="display:flex;justify-content:space-between;align-items:flex-start">' +
+        '<div><h3 style="font-size:16px">'+z.name+'</h3><span class="mono" style="font-size:11px;color:var(--ink-40)">'+z.nameAr+'</span></div>' +
+        '<label class="switch"><input type="checkbox" data-zone-toggle="'+i+'" '+(z.status==='open'?'checked':'')+' '+(z.name!=='Nizwa Core'?'disabled':'')+'><span class="track"><span class="knob"></span></span></label>' +
+      '</div>' +
+      '<p style="margin-top:10px;color:var(--ink-60);font-size:12.5px">'+z.note+'</p>' +
+      '<div style="margin-top:10px" data-zone-status="'+i+'">'+pill(z.status==='open'?'Open':'Closed', z.status)+'</div>' +
+    '</div>'
+  )).join('');
+}
+renderZones();
+document.getElementById('zoneCards').addEventListener('change', e => {
+  const input = e.target.closest('[data-zone-toggle]'); if(!input) return;
+  const i = +input.dataset.zoneToggle;
+  ZONES[i].status = input.checked ? 'open' : 'closed';
+  document.querySelector('[data-zone-status="'+i+'"]').innerHTML = pill(ZONES[i].status==='open'?'Open':'Closed', ZONES[i].status);
+  if(ZONES[i].name === 'Nizwa Core'){
+    document.getElementById('sidebarZoneStatus').textContent = ZONES[i].status === 'open' ? '● OPEN' : '● CLOSED';
+    document.getElementById('sidebarZoneStatus').style.color = ZONES[i].status === 'open' ? 'var(--falaj)' : 'var(--clay)';
+  }
+  toast(ZONES[i].name + ' set to ' + ZONES[i].status.toUpperCase());
+});
+
+/* ================= FINANCE ================= */
+(function renderFinance(){
+  const gmv = [2100,2450,1980,2600,3100,2890,3300];
+  const max = Math.max(...gmv);
+  document.getElementById('gmvBars').innerHTML = gmv.map((v,i) => (
+    '<div class="bar"><div class="track"><b style="height:'+Math.round((v/max)*100)+'%" title="'+v+' OMR"></b></div><span>'+['Mon','Tue','Wed','Thu','Fri','Sat','Sun'][i]+'</span></div>'
+  )).join('');
+
+  document.getElementById('settlementsTable').innerHTML = SETTLEMENTS.map(s => (
+    '<tr><td>'+esc(s.driver)+'</td><td class="mono">'+s.period+'</td><td class="mono">'+s.trips+'</td>' +
+    '<td class="mono">'+s.owed+'</td><td>'+pill(s.status[0].toUpperCase()+s.status.slice(1), s.status)+'</td>' +
+    '<td>'+(s.status==='pending' ? '<button class="btn btn--ghost btn--sm" data-settle="'+esc(s.driver)+'">Mark paid</button>' : '')+'</td></tr>'
+  )).join('');
+})();
+document.getElementById('settlementsTable').addEventListener('click', e => {
+  const btn = e.target.closest('[data-settle]'); if(!btn) return;
+  toast('Settlement marked paid for ' + btn.dataset.settle);
+  btn.closest('tr').querySelector('td:nth-child(5)').innerHTML = pill('Paid','paid');
+  btn.remove();
+});
+
+/* ================= SUPPORT ================= */
+function renderTickets(){
+  document.getElementById('ticketsTable').innerHTML = TICKETS.map(t => (
+    '<tr class="row" data-ticket="'+t.id+'"><td class="mono">'+t.id+'</td><td>'+esc(t.from)+'</td><td>'+esc(t.subject)+'</td>' +
+    '<td>'+pill(t.priority[0].toUpperCase()+t.priority.slice(1), t.priority)+'</td>' +
+    '<td>'+pill(t.status[0].toUpperCase()+t.status.slice(1), t.status)+'</td><td>'+t.assigned+'</td></tr>'
+  )).join('');
+  document.getElementById('navBadgeSupport').textContent = TICKETS.filter(t => t.status !== 'resolved').length;
+}
+renderTickets();
+document.getElementById('ticketsTable').addEventListener('click', e => {
+  const row = e.target.closest('[data-ticket]'); if(!row) return;
+  const ticket = TICKETS.find(t => t.id === row.dataset.ticket);
+  openTicketDrawer(ticket);
+});
+function openTicketDrawer(ticket){
+  document.getElementById('drawerKicker').textContent = 'Support ticket';
+  document.getElementById('drawerTitle').textContent = ticket.id;
+  document.getElementById('drawerBody').innerHTML =
+    '<div class="section"><span class="kicker">From</span><p>'+esc(ticket.from)+'</p></div>' +
+    '<div class="section"><span class="kicker">Subject</span><p>'+esc(ticket.subject)+'</p></div>' +
+    '<div class="field"><label>Status</label><select id="ticketStatus"><option '+(ticket.status==='open'?'selected':'')+'>open</option><option '+(ticket.status==='pending'?'selected':'')+'>pending</option><option '+(ticket.status==='resolved'?'selected':'')+'>resolved</option></select></div>' +
+    '<div class="field"><label>Assign to</label><select id="ticketAssign"><option>Amira</option><option>Fahad</option><option>Layla</option></select></div>' +
+    '<div class="field"><label>Reply</label><textarea placeholder="Write a reply to the passenger or driver…"></textarea></div>' +
+    '<button class="btn btn--primary" id="ticketSaveBtn">Save &amp; reply</button>';
+  document.getElementById('ticketSaveBtn').onclick = () => {
+    ticket.status = document.getElementById('ticketStatus').value;
+    ticket.assigned = document.getElementById('ticketAssign').value;
+    closeOverlays(); renderTickets();
+    toast('Ticket ' + ticket.id + ' updated');
+  };
+  openDrawer();
+}
+
+/* ================= OVERLAY PLUMBING ================= */
+const overlay = document.getElementById('overlay');
+const drawer = document.getElementById('drawer');
+const modal = document.getElementById('modal');
+function openDrawer(){ overlay.classList.add('is-open'); drawer.classList.add('is-open'); }
+function openModal(){ overlay.classList.add('is-open'); modal.classList.add('is-open'); }
+function closeOverlays(){ overlay.classList.remove('is-open'); drawer.classList.remove('is-open'); modal.classList.remove('is-open'); }
+overlay.addEventListener('click', closeOverlays);
+document.getElementById('drawerClose').addEventListener('click', closeOverlays);
+document.getElementById('modalClose').addEventListener('click', closeOverlays);
+document.addEventListener('keydown', e => { if(e.key === 'Escape') closeOverlays(); });
+
+/* ================= GLOBAL SEARCH (client-side demo) ================= */
+document.getElementById('globalSearch').addEventListener('keydown', e => {
+  if(e.key !== 'Enter') return;
+  const q = e.target.value.trim();
+  if(!q) return;
+  const ride = RIDES.find(r => r.id.toLowerCase().includes(q.toLowerCase()));
+  if(ride){
+    navButtons.forEach(b => b.classList.toggle('is-active', b.dataset.view === 'rides'));
+    views.forEach(v => v.classList.toggle('is-active', v.dataset.view === 'rides'));
+    pageTitle.textContent = TITLES.rides[0];
+    openRideDrawer(ride);
+    return;
+  }
+  toast('No match for "' + q + '"');
+});
+
+})();
+</script>
+</body>
+</html>
