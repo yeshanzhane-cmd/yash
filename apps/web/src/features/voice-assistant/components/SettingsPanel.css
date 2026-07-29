@@ -1,0 +1,83 @@
+.settings-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+  z-index: 20;
+}
+
+.settings-panel {
+  width: min(320px, 100%);
+  margin: 1rem;
+  padding: 1.25rem;
+  border: 1px solid var(--ax-cyan-dim);
+  border-radius: 12px;
+  background: var(--ax-panel-bg);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 0 40px rgba(0, 229, 255, 0.08);
+}
+
+.settings-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--ax-font-display);
+  letter-spacing: 0.15em;
+  color: var(--ax-cyan);
+  font-size: 0.85rem;
+  margin-bottom: 1rem;
+}
+
+.settings-close {
+  background: none;
+  border: none;
+  color: var(--ax-text-dim);
+  font-size: 1.4rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.settings-close:hover {
+  color: var(--ax-text);
+}
+
+.settings-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin-bottom: 1rem;
+  font-size: 0.85rem;
+  color: var(--ax-text-dim);
+}
+
+.settings-field select {
+  background: var(--ax-glass-bg);
+  color: var(--ax-text);
+  border: 1px solid var(--ax-cyan-dim);
+  border-radius: 6px;
+  padding: 0.5rem;
+  font-family: inherit;
+}
+
+.settings-field--row {
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.settings-danger {
+  width: 100%;
+  padding: 0.6rem;
+  background: transparent;
+  border: 1px solid #ff6b6b88;
+  color: #ff8a8a;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.settings-danger:hover {
+  background: #ff6b6b1a;
+}

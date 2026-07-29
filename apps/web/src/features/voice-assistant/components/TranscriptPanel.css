@@ -1,0 +1,62 @@
+.transcript-panel {
+  width: 100%;
+  max-width: 440px;
+  margin-top: 1.5rem;
+}
+
+.transcript-toggle {
+  background: none;
+  border: none;
+  color: var(--ax-cyan-dim);
+  font-family: var(--ax-font-mono);
+  font-size: 0.8rem;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  padding: 0.25rem 0;
+}
+
+.transcript-toggle:hover {
+  color: var(--ax-cyan);
+}
+
+.transcript-log {
+  margin-top: 0.5rem;
+  max-height: 220px;
+  overflow-y: auto;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--ax-cyan-dim);
+  border-radius: 8px;
+  background: var(--ax-glass-bg);
+  backdrop-filter: blur(8px);
+  font-family: var(--ax-font-mono);
+  font-size: 0.85rem;
+  line-height: 1.6;
+}
+
+.transcript-empty {
+  color: var(--ax-text-dim);
+  font-style: italic;
+}
+
+.transcript-line {
+  margin: 0 0 0.4rem;
+  color: var(--ax-text);
+  word-break: break-word;
+}
+
+.transcript-line--user .transcript-prefix {
+  color: var(--ax-text-dim);
+}
+
+.transcript-line--assistant .transcript-prefix,
+.transcript-line--interim .transcript-prefix {
+  color: var(--ax-cyan);
+}
+
+.transcript-line--interim {
+  opacity: 0.6;
+}
+
+.transcript-prefix {
+  font-weight: 600;
+}

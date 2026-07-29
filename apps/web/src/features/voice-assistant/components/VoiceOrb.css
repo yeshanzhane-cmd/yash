@@ -1,0 +1,129 @@
+.voice-orb-container {
+  position: relative;
+  width: clamp(160px, 40vw, 240px);
+  height: clamp(160px, 40vw, 240px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.voice-orb-core {
+  width: 34%;
+  height: 34%;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, var(--ax-cyan-bright), var(--ax-cyan) 70%);
+  box-shadow:
+    0 0 24px var(--ax-cyan-glow),
+    0 0 60px var(--ax-cyan-glow);
+  transition: box-shadow 0.4s ease;
+}
+
+.voice-orb-ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 1.5px solid var(--ax-cyan-dim);
+}
+
+.voice-orb-ring--outer {
+  inset: 0;
+}
+
+.voice-orb-ring--inner {
+  inset: 16%;
+}
+
+.voice-orb-label {
+  position: absolute;
+  bottom: -2.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--ax-font-display);
+  font-size: 0.8rem;
+  letter-spacing: 0.25em;
+  color: var(--ax-cyan);
+  white-space: nowrap;
+  text-shadow: 0 0 8px var(--ax-cyan-glow);
+}
+
+/* idle: rings static, core breathes gently */
+.voice-orb-container[data-state="idle"] .voice-orb-core {
+  animation: ax-breathe 4s ease-in-out infinite;
+}
+
+/* listening: outer ring rotates */
+.voice-orb-container[data-state="listening"] .voice-orb-ring--outer {
+  animation: ax-spin 3s linear infinite;
+  border-style: dashed;
+}
+.voice-orb-container[data-state="listening"] .voice-orb-ring--inner {
+  animation: ax-spin 2s linear infinite reverse;
+}
+.voice-orb-container[data-state="listening"] .voice-orb-core {
+  box-shadow:
+    0 0 32px var(--ax-cyan-glow),
+    0 0 80px var(--ax-cyan-glow);
+}
+
+/* thinking: rings pulse */
+.voice-orb-container[data-state="thinking"] .voice-orb-ring--outer,
+.voice-orb-container[data-state="thinking"] .voice-orb-ring--inner {
+  animation: ax-pulse-ring 1.1s ease-in-out infinite;
+}
+
+/* speaking: core pulses rhythmically */
+.voice-orb-container[data-state="speaking"] .voice-orb-core {
+  animation: ax-speak-pulse 0.5s ease-in-out infinite;
+}
+.voice-orb-container[data-state="speaking"] .voice-orb-ring--outer {
+  animation: ax-spin 5s linear infinite;
+}
+
+@keyframes ax-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes ax-breathe {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.9;
+  }
+  50% {
+    transform: scale(1.06);
+    opacity: 1;
+  }
+}
+
+@keyframes ax-pulse-ring {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+  50% {
+    transform: scale(1.12);
+    opacity: 1;
+  }
+}
+
+@keyframes ax-speak-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.15);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .voice-orb-ring,
+  .voice-orb-core {
+    animation: none !important;
+  }
+}

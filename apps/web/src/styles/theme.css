@@ -1,0 +1,40 @@
+:root {
+  --ax-bg: #050810;
+  --ax-panel-bg: #0b0f1a;
+  --ax-glass-bg: rgba(255, 255, 255, 0.04);
+  --ax-text: #eef2f7;
+  --ax-text-dim: #8894a6;
+  --ax-cyan: #00e5ff;
+  --ax-cyan-bright: #baf9ff;
+  --ax-cyan-dim: rgba(0, 229, 255, 0.35);
+  --ax-cyan-glow: rgba(0, 229, 255, 0.45);
+  --ax-font-display: "Rajdhani", "Inter", sans-serif;
+  --ax-font-body: "Inter", system-ui, sans-serif;
+  --ax-font-mono: "Rajdhani", "Menlo", "Consolas", monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: radial-gradient(circle at 50% 20%, #0c1424 0%, var(--ax-bg) 60%);
+  color: var(--ax-text);
+  font-family: var(--ax-font-body);
+  background-image:
+    radial-gradient(circle at 50% 20%, #0c1424 0%, var(--ax-bg) 60%),
+    repeating-linear-gradient(
+      0deg,
+      rgba(0, 229, 255, 0.025) 0px,
+      rgba(0, 229, 255, 0.025) 1px,
+      transparent 1px,
+      transparent 3px
+    );
+}

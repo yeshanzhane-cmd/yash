@@ -1,0 +1,95 @@
+.app-shell {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.app-header {
+  width: 100%;
+  max-width: 480px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem 1.5rem 0;
+}
+
+.app-wordmark {
+  font-family: var(--ax-font-display);
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  font-size: 1rem;
+  color: var(--ax-cyan);
+  text-shadow: 0 0 10px var(--ax-cyan-glow);
+}
+
+.app-settings-trigger {
+  background: none;
+  border: 1px solid var(--ax-cyan-dim);
+  color: var(--ax-cyan);
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.app-settings-trigger:hover {
+  box-shadow: 0 0 16px var(--ax-cyan-glow);
+}
+
+.app-main {
+  flex: 1;
+  width: 100%;
+  max-width: 480px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1.5rem 3rem;
+  gap: 3rem;
+}
+
+.app-controls {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.app-text-fallback {
+  display: flex;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.app-text-fallback input {
+  flex: 1;
+  padding: 0.6rem 0.75rem;
+  border-radius: 6px;
+  border: 1px solid var(--ax-cyan-dim);
+  background: var(--ax-glass-bg);
+  color: var(--ax-text);
+  font-family: inherit;
+}
+
+.app-text-fallback button {
+  padding: 0.6rem 1rem;
+  border-radius: 6px;
+  border: 1px solid var(--ax-cyan-dim);
+  background: var(--ax-cyan);
+  color: var(--ax-bg);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.app-text-fallback button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.app-hint {
+  color: var(--ax-text-dim);
+  font-size: 0.75rem;
+  text-align: center;
+  max-width: 320px;
+}

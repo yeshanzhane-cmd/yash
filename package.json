@@ -1,0 +1,23 @@
+{
+  "name": "alpha-x",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Alpha X — a JARVIS-inspired voice AI agent (STT -> LLM -> TTS web app)",
+  "workspaces": [
+    "apps/server",
+    "apps/web"
+  ],
+  "scripts": {
+    "dev": "concurrently -n server,web -c blue,cyan \"npm:dev:server\" \"npm:dev:web\"",
+    "dev:server": "npm run dev --workspace=apps/server",
+    "dev:web": "npm run dev --workspace=apps/web",
+    "build": "npm run build --workspace=apps/server && npm run build --workspace=apps/web",
+    "lint": "npm run lint --workspace=apps/server && npm run lint --workspace=apps/web"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
