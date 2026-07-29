@@ -84,6 +84,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
+    top: '60%',
     backgroundColor: color.limewash,
     borderTopWidth: 1,
     borderColor: color.line,
