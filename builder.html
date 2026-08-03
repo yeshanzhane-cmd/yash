@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CV Builder — MOMO Store</title>
+  <meta name="description" content="Build your CV in the browser: enter your details once and switch instantly between four distinct template designs and five color themes. Export to PDF.">
+  <meta name="robots" content="noindex">
+
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%3E%0A%3Cdefs%3E%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%0A%3Cstop%20offset%3D%220%22%20stop-color%3D%22%2322C3E6%22%2F%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%232F6BFF%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%0A%3Cpath%20d%3D%22M32%203%20L57%2017.5%20V46.5%20L32%2061%20L7%2046.5%20V17.5%20Z%22%20fill%3D%22url(%23g)%22%2F%3E%0A%3Cpath%20d%3D%22M32%209%20L52%2020.5%20V43.5%20L32%2055%20L12%2043.5%20V20.5%20Z%22%20fill%3D%22%23FFFFFF%22%2F%3E%0A%3Ctext%20x%3D%2232%22%20y%3D%2240%22%20text-anchor%3D%22middle%22%20font-family%3D%22Arial%20Black%2C%20Arial%2C%20sans-serif%22%20font-size%3D%2222%22%20font-weight%3D%22900%22%20fill%3D%22%2312303C%22%3EM%3C%2Ftext%3E%0A%3C%2Fsvg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@500;600;700;800&family=Geist:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="assets/css/base.css">
+  <link rel="stylesheet" href="assets/css/store.css">
+  <link rel="stylesheet" href="assets/css/builder.css">
+</head>
+<body>
+
+  <nav class="nav" aria-label="Primary">
+    <div class="wrap nav__inner">
+      <a class="wordmark" href="index.html">MOMO <em>Store</em></a>
+      <ul class="nav__links">
+        <li><a href="shop.html">Shop</a></li>
+        <li><a href="builder.html" aria-current="page">CV Builder</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="account.html">Account</a></li>
+      </ul>
+      <div class="nav__actions">
+        <a class="cart-btn" href="account.html" aria-label="Account">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </a>
+        <a class="cart-btn" href="cart.html" aria-label="Cart">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
+          <span class="badge" id="cart-badge" hidden>0</span>
+        </a>
+        <button class="btn btn--accent nav__shop" id="pdf-btn" type="button">Download PDF</button>
+      </div>
+    </div>
+  </nav>
+
+  <main class="builder-page">
+    <div class="wrap">
+      <header class="page-head builder-head" style="padding-bottom: 40px;">
+        <span class="eyebrow">CV Builder</span>
+        <h1>Type once. <span class="grad-text">Try every design.</span></h1>
+        <p>Your details render live into four distinct layouts — switch templates and colors until it feels like you, then download the PDF.</p>
+      </header>
+
+      <div class="controls" role="group" aria-label="Start from a preset">
+        <div class="group" id="preset-group" role="group" aria-label="Role presets">
+          <span>Presets</span>
+        </div>
+        <div class="group spacer">
+          <button class="btn btn--ghost" id="signature-btn" type="button" style="padding: 10px 20px; font-size: 14px;" title="A template, color and photo shape derived from your account — unique to you">✨ My signature look</button>
+        </div>
+      </div>
+
+      <div class="controls" role="group" aria-label="Design controls">
+        <div class="group" id="tpl-group-cv" role="group" aria-label="CV templates">
+          <span>CV</span>
+        </div>
+        <div class="group" id="tpl-group-pf" role="group" aria-label="Portfolio themes">
+          <span>Portfolio</span>
+        </div>
+        <div class="group" id="color-group" role="group" aria-label="Accent color">
+          <span>Color</span>
+        </div>
+        <div class="group spacer">
+          <button class="btn btn--ghost" id="reset-btn" type="button" style="padding: 10px 20px; font-size: 14px;">Reset to sample</button>
+        </div>
+      </div>
+
+      <div class="workspace">
+        <section class="editor" aria-label="Your details">
+          <form id="cv-form">
+            <h2>You</h2>
+            <div class="photo-drop">
+              <span id="photo-preview" class="ph">photo</span>
+              <div class="field" style="flex:1">
+                <label for="f-photo">Photo (used by the Studio template)</label>
+                <input class="input" type="file" id="f-photo" accept="image/*">
+              </div>
+            </div>
+            <div class="row2">
+              <div class="field"><label for="f-name">Full name</label><input class="input" type="text" id="f-name" data-key="name"></div>
+              <div class="field"><label for="f-title">Job title</label><input class="input" type="text" id="f-title" data-key="title"></div>
+            </div>
+            <div class="row2">
+              <div class="field"><label for="f-email">Email</label><input class="input" type="email" id="f-email" data-key="email"></div>
+              <div class="field"><label for="f-phone">Phone</label><input class="input" type="text" id="f-phone" data-key="phone"></div>
+            </div>
+            <div class="row2">
+              <div class="field"><label for="f-location">Location</label><input class="input" type="text" id="f-location" data-key="location"></div>
+              <div class="field"><label for="f-website">Website</label><input class="input" type="text" id="f-website" data-key="website"></div>
+            </div>
+            <div class="field"><label for="f-summary">Profile summary</label><textarea class="input" id="f-summary" data-key="summary"></textarea></div>
+
+            <h2>Experience</h2>
+            <div id="exp-list"></div>
+            <button class="btn btn--ghost add-entry" type="button" id="add-exp">+ Add role</button>
+
+            <h2>Education</h2>
+            <div id="edu-list"></div>
+            <button class="btn btn--ghost add-entry" type="button" id="add-edu">+ Add education</button>
+
+            <h2>Skills</h2>
+            <div class="field">
+              <label for="f-skills">Comma-separated</label>
+              <input class="input" type="text" id="f-skills" placeholder="Figma, Prototyping, HTML/CSS">
+            </div>
+          </form>
+        </section>
+
+        <section class="preview-area" aria-label="Live preview">
+          <div class="preview-well print-root">
+            <div class="cv-page" id="cv-mount" aria-live="polite"></div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap">
+      <div class="footer__base" style="border-top: 1px solid var(--hairline);">
+        <span>© 2026 MOMO Store. All rights reserved.</span>
+        <span>Made by creators, for creators.</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="assets/js/products.js" defer></script>
+  <script src="assets/js/cart.js" defer></script>
+  <script src="assets/js/ui.js" defer></script>
+  <script src="assets/js/builder.js" defer></script>
+  <script defer>
+    document.addEventListener('DOMContentLoaded', () => {
+      // The builder is a signed-in feature: profiles keep the CV per browser.
+      const user = (() => { try { return JSON.parse(localStorage.getItem('ecv-user')); } catch { return null; } })();
+      if (!user || !user.email) { location.replace('login.html?next=builder.html'); return; }
+
+      const cv = cvLoad();
+      const mount = document.getElementById('cv-mount');
+      const form = document.getElementById('cv-form');
+
+      let saveTimer;
+      function update() {
+        renderCV(cv, mount);
+        clearTimeout(saveTimer);
+        saveTimer = setTimeout(() => cvSave(cv), 300);
+      }
+
+      /* ----- template + color controls ----- */
+      function syncPickers() {
+        document.querySelectorAll('.tpl-btn[data-tpl]').forEach((x) => x.setAttribute('aria-pressed', String(x.dataset.tpl === cv.template)));
+        document.querySelectorAll('.swatch').forEach((x) => x.setAttribute('aria-pressed', String(x.dataset.hex === cv.accent)));
+      }
+
+      CV_TEMPLATES.forEach((t) => {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'tpl-btn';
+        b.textContent = t.name;
+        b.dataset.tpl = t.id;
+        b.setAttribute('aria-pressed', String(cv.template === t.id));
+        b.addEventListener('click', () => { cv.template = t.id; syncPickers(); update(); });
+        document.getElementById(t.group === 'CV' ? 'tpl-group-cv' : 'tpl-group-pf').appendChild(b);
+      });
+
+      const colorGroup = document.getElementById('color-group');
+      CV_COLORS.forEach((c) => {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'swatch';
+        b.style.background = c.hex;
+        b.style.setProperty('--sw', c.hex);
+        b.dataset.hex = c.hex;
+        b.setAttribute('aria-label', `Accent color ${c.id}`);
+        b.setAttribute('aria-pressed', String(cv.accent === c.hex));
+        b.addEventListener('click', () => { cv.accent = c.hex; syncPickers(); update(); });
+        colorGroup.appendChild(b);
+      });
+
+      /* ----- role presets: preloaded starter content + matching theme ----- */
+      const presetGroup = document.getElementById('preset-group');
+      CV_PRESETS.forEach((p) => {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'tpl-btn';
+        b.textContent = p.label;
+        b.addEventListener('click', () => {
+          if (!confirm(`Load the ${p.label} preset? Your current entries will be replaced (name, email and photo are kept).`)) return;
+          const keep = { name: cv.name, email: cv.email, phone: cv.phone, photo: cv.photo, blob: cv.blob };
+          Object.assign(cv, JSON.parse(JSON.stringify(p.data)), keep, { template: p.template, accent: p.accent });
+          fillForm(); renderEntries(); syncPickers(); update();
+        });
+        presetGroup.appendChild(b);
+      });
+
+      /* ----- signature look: deterministic, unique per account ----- */
+      document.getElementById('signature-btn').addEventListener('click', () => {
+        Object.assign(cv, signatureMix(user.email));
+        syncPickers(); update();
+      });
+
+      function fillForm() {
+        form.querySelectorAll('[data-key]').forEach((input) => { input.value = cv[input.dataset.key] || ''; });
+        skillsInput.value = cv.skills.join(', ');
+      }
+
+      /* ----- simple fields ----- */
+      form.querySelectorAll('[data-key]').forEach((input) => {
+        input.value = cv[input.dataset.key] || '';
+        input.addEventListener('input', () => { cv[input.dataset.key] = input.value; update(); });
+      });
+
+      const skillsInput = document.getElementById('f-skills');
+      skillsInput.value = cv.skills.join(', ');
+      skillsInput.addEventListener('input', () => {
+        cv.skills = skillsInput.value.split(',').map((s) => s.trim()).filter(Boolean);
+        update();
+      });
+
+      /* ----- photo upload ----- */
+      const photoPreview = document.getElementById('photo-preview');
+      function showPhoto() {
+        if (cv.photo) {
+          const img = document.createElement('img');
+          img.src = cv.photo;
+          img.alt = 'Your photo';
+          photoPreview.replaceWith(img);
+          img.id = 'photo-preview';
+        }
+      }
+      showPhoto();
+      document.getElementById('f-photo').addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        if (file.size > 2 * 1024 * 1024) { alert('Please choose an image under 2 MB.'); return; }
+        const reader = new FileReader();
+        reader.onload = () => { cv.photo = reader.result; showPhoto(); update(); };
+        reader.readAsDataURL(file);
+      });
+
+      /* ----- repeatable entries ----- */
+      function entryRow(kind, item, index) {
+        const isExp = kind === 'exp';
+        const wrap = document.createElement('div');
+        wrap.className = 'entry';
+        wrap.innerHTML = `
+          <button class="remove-btn" type="button" aria-label="Remove entry">Remove</button>
+          <div class="row2">
+            <div class="field"><label>${isExp ? 'Role' : 'Degree'}</label><input class="input" type="text" data-f="${isExp ? 'role' : 'degree'}"></div>
+            <div class="field"><label>${isExp ? 'Company' : 'School'}</label><input class="input" type="text" data-f="${isExp ? 'company' : 'school'}"></div>
+          </div>
+          <div class="field"><label>Dates</label><input class="input" type="text" data-f="dates" placeholder="2022 — Present"></div>
+          ${isExp ? '<div class="field"><label>What you achieved</label><textarea class="input" data-f="desc"></textarea></div>' : ''}`;
+        wrap.querySelectorAll('[data-f]').forEach((input) => {
+          input.value = item[input.dataset.f] || '';
+          input.addEventListener('input', () => { item[input.dataset.f] = input.value; update(); });
+        });
+        wrap.querySelector('.remove-btn').addEventListener('click', () => {
+          (isExp ? cv.experience : cv.education).splice(index, 1);
+          renderEntries(); update();
+        });
+        return wrap;
+      }
+
+      function renderEntries() {
+        const expList = document.getElementById('exp-list');
+        const eduList = document.getElementById('edu-list');
+        expList.replaceChildren(...cv.experience.map((it, i) => entryRow('exp', it, i)));
+        eduList.replaceChildren(...cv.education.map((it, i) => entryRow('edu', it, i)));
+      }
+      renderEntries();
+
+      document.getElementById('add-exp').addEventListener('click', () => {
+        cv.experience.push({ role: '', company: '', dates: '', desc: '' });
+        renderEntries(); update();
+      });
+      document.getElementById('add-edu').addEventListener('click', () => {
+        cv.education.push({ degree: '', school: '', dates: '' });
+        renderEntries(); update();
+      });
+
+      /* ----- actions ----- */
+      document.getElementById('pdf-btn').addEventListener('click', () => window.print());
+      document.getElementById('reset-btn').addEventListener('click', () => {
+        if (!confirm('Replace your current CV with the sample data?')) return;
+        Object.assign(cv, JSON.parse(JSON.stringify(CV_SAMPLE)));
+        form.querySelectorAll('[data-key]').forEach((input) => { input.value = cv[input.dataset.key] || ''; });
+        skillsInput.value = cv.skills.join(', ');
+        renderEntries(); update();
+      });
+
+      update();
+    });
+  </script>
+</body>
+</html>
